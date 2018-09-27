@@ -1,2 +1,1 @@
-# rs2018
-
+Questions / réponses sur le projet de RS :
