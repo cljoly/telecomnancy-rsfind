@@ -9,7 +9,8 @@ int main() {
   struct dirent *file;
   // TODO Treat errno after while loop
   while ((file=readdir(working_dir)) != NULL) {
-    printf("%s/%s\t\t\t%i\t%i\n", working_dir_name, file->d_name, file->d_type, file->d_reclen);
+    printf("%s/%s\t\t\t%i\t%i\n", working_dir_name, file->d_name, file->d_type,
+file->d_reclen);
   }
 }
 */
