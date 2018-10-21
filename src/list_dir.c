@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 // TODO Delete this
+/*
 int main() {
   char working_dir_name[] = ".";
   DIR *working_dir = opendir(working_dir_name);
@@ -11,3 +12,4 @@ int main() {
     printf("%s/%s\t\t\t%i\t%i\n", working_dir_name, file->d_name, file->d_type, file->d_reclen);
   }
 }
+*/
