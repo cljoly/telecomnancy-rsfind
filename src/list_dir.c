@@ -86,6 +86,7 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
             // XXX Ignoring other file types…
         }
     }
+    closedir(dir);
     return 0;
 }
 
