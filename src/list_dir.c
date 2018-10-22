@@ -66,11 +66,15 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
     struct dirent *file;
     // Result of filter functions
     DIR *dir = opendir(ctxt->dir_name);
+    if (dir == NULL) {
+        printf("dir is NULL, %i\n", errno);
+        return errno;
+    }
     // TODO Treat errno after while loop
     while ((file = readdir(dir)) != NULL) {
         int ignore = apply_filter(file);
         if (!ignore) {
-          if (!strcmp(file->d_name, ".") || !strcmp(file->d_name, "..")) {
+            if (!strcmp(file->d_name, ".") || !strcmp(file->d_name, "..")) {
                 // Don’t iterate over current directory
             } else if (file->d_type == DT_REG) { // Regular file
                 printer(ctxt, file->d_name);
