@@ -14,8 +14,8 @@ SRCEXT      := c
 OBJEXT      := o
 
 #Flags and Libraries
-CFLAGS      := -Wall -Werror -Wextra -Wformat
-LIB         := 
+CFLAGS      := -Wall -Werror -Wextra -Wformat -g
+LIB         :=
 
 #---------------------------------------------------------------------------------
 #DO NOT EDIT BELOW THIS LINE

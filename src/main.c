@@ -1,3 +1,4 @@
+#include "list_dir.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -101,6 +102,8 @@ int main(int argc, char **argv) {
             printf("%s ", argv[optind++]);
         putchar('\n');
     }
+
+    list();
 
     exit(0);
 }
