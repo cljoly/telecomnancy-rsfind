@@ -8,7 +8,8 @@
 typedef struct ctxt {
     // Context from last call
     struct ctxt *last;
-    // Current directory (must be a directory)
+    // Current directory (must be a directory), complete path from current
+    // directory
     char *dir_name;
 } context;
 
@@ -19,8 +20,11 @@ context *create_context(context *last, char *path) {
     if (ctxt == NULL) {
         return NULL;
     }
-    char *dir_name = (char *)malloc(sizeof(char) * DNAME_LENGTH);
-    strncpy(dir_name, path, DNAME_LENGTH);
+    char *dir_name = (char *)calloc(DNAME_LENGTH, sizeof(char));
+    if (last != NULL)
+        strncpy(dir_name, last->dir_name, DNAME_LENGTH);
+    strncat(dir_name, "/", DNAME_LENGTH);
+    strncat(dir_name, path, DNAME_LENGTH);
     ctxt->dir_name = dir_name;
     ctxt->last = last;
     return ctxt;
