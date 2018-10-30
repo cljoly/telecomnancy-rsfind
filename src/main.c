@@ -1,5 +1,6 @@
 #include "list_dir.h"
 #include "printers.h"
+#include "image_search.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +14,7 @@ int main(int argc, char **argv) {
     // rsfind behave like find when no arguments are passed.
     printer printer = basic_printer;
     // TODO Make it growable (allow to add filter)
-    filter filters[] = {NULL};
+    filter filters[] = {NULL, NULL, NULL, NULL};
     char path[] = ".";
 
     ///////flags
@@ -72,6 +73,8 @@ int main(int argc, char **argv) {
         case 'i':
             puts("option -i\n");
             i_flag = 1;
+            image_init();
+            filters[0] = image_filter;
             break;
 
         case 'l':
