@@ -28,7 +28,7 @@ all: directories $(TARGET)
 
 #test
 test: all test.sh
-	bash test.sh
+	bash test.sh $(TARGETDIR)/$(TARGET)
 
 #Remake
 remake: cleaner all

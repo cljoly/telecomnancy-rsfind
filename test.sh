@@ -6,16 +6,18 @@ command="echo"
 rsfind_bin=$1
 rsfind=(
 "echo Testing test script"
-"$rsfind_bin $folder" 
+"$rsfind_bin"
+"$rsfind_bin $folder"
 "$rsfind_bin $folder --name $name"
 "$rsfind $folder --print"
 "$rsfind $folder -t $name"
 "$rsfind $folder -i"
 "$rsfind $folder -l"
 "$rsfind $folder --exec \"$command\""
-) 
+)
 origf=(
 "echo Testing test script"
+"find"
 "find $folder"
 "find $folder -name $name"
 "find $folder -print"
@@ -45,6 +47,7 @@ for i in $(seq 0 3); do
     printf "${RED}TEST $i: ❌${NC} ${rsfind[$i]}\n"
     diff $a $b
     retcode=1
+    exit $retcode
   fi
   rm $a $b
 done
