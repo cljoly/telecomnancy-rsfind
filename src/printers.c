@@ -1,7 +1,11 @@
 #include "printers.h"
 
 void basic_printer(context *ctxt, char file[]) {
-  printf("%s/%s\n", ctxt->dir_name, file);
+  if ( ctxt == NULL ) {
+    printf("%s\n", file);
+  } else {
+    printf("%s/%s\n", ctxt->dir_name, file);
+  }
 }
 
 void complete_printer(context *ctxt, char file[]) {
