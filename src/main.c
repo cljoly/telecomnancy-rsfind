@@ -3,11 +3,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "printers.h"
 
 int main(int argc, char **argv) {
     /////////////options/////////////
 
+  // These variables will be modified as argument are parsed and
+  // then used with walk_from. Default values have been chosen so as to make
+  // rsfind behave like find when no arguments are passed.
+  printer printer = basic_printer;
+  // TODO Make it growable (allow to add filter)
+  filter filters[] = {NULL};
+  char path[] = ".";
+
     ///////flags
+  // FIXME Delete this? (may not be used)
     static int l_flag;
     static int t_flag;
     static int i_flag;
@@ -67,6 +77,7 @@ int main(int argc, char **argv) {
         case 'l':
             puts("option -l\n");
             l_flag = 1;
+            printer = complete_printer;
             break;
 
         case 't':
@@ -103,7 +114,7 @@ int main(int argc, char **argv) {
         putchar('\n');
     }
 
-    list();
+    walk_from(path, filters, printer);
 
     exit(0);
 }

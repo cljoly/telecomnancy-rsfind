@@ -7,9 +7,6 @@
 #ifndef LIST_DIR_H
 #define LIST_DIR_H
 
-// TODO Remove this
-void list();
-
 // Length for a file name in various part of dirent
 #define DNAME_LENGTH 256
 

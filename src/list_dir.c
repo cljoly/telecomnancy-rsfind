@@ -86,12 +86,3 @@ int walk_from(char path[], filter filters[], printer printer) {
     ctxt->last = NULL;
     return dir_walker(ctxt, filters, printer);
 }
-
-void print_name(context *ctxt, char file[]) {
-    printf("%s/%s\n", ctxt->dir_name, file);
-}
-
-void list() {
-    filter filters[] = {NULL};
-    walk_from(".", filters, &print_name);
-}
