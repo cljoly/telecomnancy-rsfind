@@ -68,7 +68,7 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
             } else if (file->d_type == DT_REG) { // Regular file
                 printer(ctxt, file->d_name);
             } else if (file->d_type == DT_DIR) {
-              printer(ctxt, file->d_name);
+                printer(ctxt, file->d_name);
                 context *next_ctxt = create_context_from_dirent(ctxt, file);
                 dir_walker(next_ctxt, filters, printer);
                 free_context(next_ctxt);
@@ -82,7 +82,7 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
 
 // Path: name of the directory to explore from
 int walk_from(char path[], filter filters[], printer printer) {
-  // First printing on path, like printf
+    // First printing on path, like printf
     printer(NULL, path);
     context *ctxt = create_context(NULL, path);
     strncpy(ctxt->dir_name, path, DNAME_LENGTH);
