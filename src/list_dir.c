@@ -2,17 +2,6 @@
 
 // Dirent: directory entry, file or directory
 
-#define DNAME_LENGTH 256
-
-// Context for recursive call of directory walker
-typedef struct ctxt {
-    // Context from last call
-    struct ctxt *last;
-    // Current directory (must be a directory), complete path from current
-    // directory
-    char *dir_name;
-} context;
-
 // Create context from another, use NULL for the first context of the list
 // May return NULL in case of allocation error
 context *create_context(context *last, char *path) {
@@ -45,11 +34,7 @@ void free_context(context *ctxt) {
     free(ctxt);
 }
 
-// To filter a path. Returns 1 if the dirent should be ignored
-typedef int (*filter)(context *, char[DNAME_LENGTH]);
-typedef void (*printer)(context *, char[DNAME_LENGTH]);
-
-// Walk through directories and files, recursively
+// Walker through directories and files, recursively
 // Context must point to a folder
 // Filter is a NULL terminated array of functions telling whether the file or
 // directory should be ignored.
