@@ -17,7 +17,7 @@ void image_free() {
 // A filter, as defined in list_dir.h
 // The magic cookie (see libmagic(3)) must have been initiliased
 int image_filter(context *ctxt, char *path) {
-    const char *file_type = magic_file(cookie, "./simple.png");
+    const char *file_type = magic_file(cookie, path);
     // TODO How this is for images
     printf("FILE TYPE: %s (%s %s)\n", file_type, ctxt->dir_name, path);
     return 0;
