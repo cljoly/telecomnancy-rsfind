@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     printer printer = basic_printer;
     // TODO Make it growable (allow to add filter)
     filter filters[] = {NULL};
-    char path[] = ".";
+    char *path = ".";
 
     ///////flags
     // FIXME Delete this? (may not be used)
@@ -108,10 +108,7 @@ int main(int argc, char **argv) {
 
     /* Print any remaining command line arguments (not options). */
     if (optind < argc) {
-        printf("non-option ARGV-elements: ");
-        while (optind < argc)
-            printf("%s ", argv[optind++]);
-        putchar('\n');
+      path = argv[optind++];
     }
 
     walk_from(path, filters, printer);
