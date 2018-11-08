@@ -9,7 +9,7 @@ TARGET      := rsfind
 #The Directories, Source, Objects, Binary
 SRCDIR      := src
 BUILDDIR    := obj
-TARGETDIR   := bin
+TARGETDIR   := .
 SRCEXT      := c
 OBJEXT      := o
 
