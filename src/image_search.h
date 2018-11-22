@@ -6,4 +6,4 @@ void image_init();
 
 void image_close();
 
-int image_filter(context *ctxt, char *path);
+filter_result image_filter(context *ctxt, char *path);

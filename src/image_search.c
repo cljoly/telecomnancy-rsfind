@@ -6,30 +6,18 @@
 static magic_t cookie = NULL;
 
 void image_init() {
+  fprintf(stderr, "img init\n");
     cookie = magic_open(MAGIC_MIME_TYPE);
     magic_load(cookie, NULL);
     return;
 }
 
 void image_free() {
-  magic_close(cookie);
+  if (cookie != NULL) {
+    magic_close(cookie);
+  }
   return;
 }
-
-// Known types for image
-char *img_mimes[] = {
-  "image/svg",
-  "image/png",
-  "image/jpeg",
-  "image/jpeg",
-  "image/png",
-  "image/tiff",
-  "image/jpeg",
-  "application/pdf",
-  "image/svg+xml",
-  "image/x-ms-bmp",
-  NULL
-};
 
 // Types to be traversed
 // TODO Take other types into account
@@ -52,20 +40,26 @@ int is_in_set(char *set[], const char *str) {
     return 1;
 }
 
+// Checks if a mime type is an image mime type
+int is_image_mime(const char mime_type[]) {
+  // strncmp retuns 0 if file_type starts with "image/"
+  int is_not_matching = strncmp("image/", mime_type, 6);
+  return !is_not_matching;
+}
+
 // A filter, as defined in list_dir.h
 // The magic cookie (see libmagic(3)) must have been initiliased
-int image_filter(context *ctxt, char *path) {
+filter_result image_filter(context *ctxt, char *path) {
   char cpl_path[DNAME_LENGTH];
   complete_path(ctxt, path, cpl_path);
   const char *file_type = magic_file(cookie, cpl_path);
-  fprintf(stderr, "FILE TYPE: '%s' (%s %s)\n", file_type, ctxt->dir_name, path);
+  fprintf(stderr, "FILE TYPE: '%s' (%s %s)\n", file_type, path, ctxt->dir_name);
   int traverse = is_in_set(traverse_mimes, file_type);
-  fprintf(stderr, "traverse %i\n", traverse);
   if (traverse) {
     return FILTER_KEEP;
   } else {
-    int is_image = is_in_set(img_mimes, file_type);
-    fprintf(stderr, "is_image %i\n", is_image);
-    return !is_image;
+    int is_image = is_image_mime(file_type);
+    if (is_image) return FILTER_KEEP;
+    else return FILTER_IGNORE;
   }
 }

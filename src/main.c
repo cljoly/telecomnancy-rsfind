@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
             break;
 
         case 'i':
-            puts("option -i\n");
+          fprintf(stderr, "option -i\n");
             i_flag = 1;
             image_init();
             filters[0] = image_filter;
