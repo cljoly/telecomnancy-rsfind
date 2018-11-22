@@ -1,0 +1,46 @@
+{
+    "commands":
+    [
+        {
+            "a": "echo Testing test script",
+            "b": "echo Testing test script"
+        },
+        {
+            "a": "./rsfind",
+            "b": "find"
+        },
+        {
+            "a": "./rsfind $folder",
+            "b": "find $folder"
+        },
+        {
+            "a": "./rsfind $folder --name a-1",
+            "b": "find $folder -name a-1"
+        },
+        {
+            "a": "./rsfind $folder --print",
+            "b": "find $folder -print"
+        },
+        {
+            "a": "./rsfind $folder -t $name",
+            "b": "grep -r -l $folder -e $name"
+        },
+        {
+            "a": "./rsfind $folder -i",
+            "b": "find $folder -type f -exec file {} \\; | grep image | cut -d : -f 1"
+        },
+        {
+            "a": "./rsfind $folder -l",
+            "b": "find $folder -exec ls -l -d {} \\;"
+        },
+        {
+            "a": "./rsfind $folder --exec \"file {}\"",
+            "b": "find $folder -exec file {} \\;"
+        },
+        {
+            "a": "echo Fin des tests 🎉",
+            "b": "echo Fin des tests 🎉"
+        }
+    ],
+    "folders": [ "./file_struct", "/tmp/"]
+}
