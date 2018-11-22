@@ -29,9 +29,14 @@ context *create_context_from_dirent(context *last, struct dirent *d) {
 }
 
 void complete_path(context *ctxt, char *path, char *result) {
-  strncpy(result, ctxt->dir_name, DNAME_LENGTH);
-  strncat(result, "/", DNAME_LENGTH);
-  strncat(result, path, DNAME_LENGTH);
+  if (ctxt == NULL) {
+        char* path = "./";
+        strcpy(result, path);
+    } else {
+        strncpy(result, ctxt->dir_name, DNAME_LENGTH);
+  			strncat(result, "/", DNAME_LENGTH);
+  			strncat(result, path, DNAME_LENGTH);
+    }
 }
 
 // TODO Free context
