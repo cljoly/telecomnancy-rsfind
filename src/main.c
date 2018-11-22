@@ -12,9 +12,27 @@ int main(int argc, char **argv) {
     // then used with walk_from. Default values have been chosen so as to make
     // rsfind behave like find when no arguments are passed.
     printer printer = basic_printer;
-    // TODO Make it growable (allow to add filter)
-    filter filters[] = {NULL};
     char *path = ".";
+    // XXX Should be big enough ;-)
+    filter filters[] = {
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    };
+    // Ajout des fonctions de filtre à l’ensemble des filtres
+    void add_to_filters(filter f) {
+      int i = 0;
+      while (filters[i] == NULL) {
+        i++;
+      }
+      filters[i] = f;
+    }
 
     ///////flags
     // FIXME Delete this? (may not be used)
