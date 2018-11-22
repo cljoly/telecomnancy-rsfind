@@ -1,5 +1,6 @@
 #include "list_dir.h"
 #include "printers.h"
+#include "image_search.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -88,8 +89,10 @@ int main(int argc, char **argv) {
             break;
 
         case 'i':
-            puts("option -i\n");
+          fprintf(stderr, "option -i\n");
             i_flag = 1;
+            image_init();
+            filters[0] = image_filter;
             break;
 
         case 'l':

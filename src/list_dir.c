@@ -28,6 +28,12 @@ context *create_context_from_dirent(context *last, struct dirent *d) {
     return create_context(last, d->d_name);
 }
 
+void complete_path(context *ctxt, char *path, char *result) {
+  strncpy(result, ctxt->dir_name, DNAME_LENGTH);
+  strncat(result, "/", DNAME_LENGTH);
+  strncat(result, path, DNAME_LENGTH);
+}
+
 // TODO Free context
 void free_context(context *ctxt) {
     free(ctxt->dir_name);
@@ -43,11 +49,15 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
     int apply_filter(struct dirent * file) {
         // Whether the file should be ignored
         int ignore = 0;
-        // Indice in filter array
         int filter_ind = 0;
+        int filter_result = 0;
         ignore = 0;
         while (!ignore && filters[filter_ind] != NULL) {
-            ignore = filters[filter_ind](ctxt, file->d_name);
+            filter_result = filters[filter_ind](ctxt, file->d_name);
+            switch(filter_result){
+              case FILTER_IGNORE: ignore = 1; break;
+              case FILTER_KEEP: ignore = 0; break;
+            }
             filter_ind++;
         }
         return ignore;

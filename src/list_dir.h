@@ -10,6 +10,12 @@
 // Length for a file name in various part of dirent
 #define DNAME_LENGTH 256
 
+// To code result of filter, to compel ourselves to write it explicitely
+typedef enum {
+  FILTER_IGNORE=18, // Ignore current element
+  FILTER_KEEP=180   // Keep current element
+} filter_result;
+
 // Context for recursive call of directory walker
 // You may sometimes need it in your filter/printer but nowhere else
 typedef struct ctxt {
@@ -21,7 +27,7 @@ typedef struct ctxt {
 } context;
 
 // To filter a path. Returns 1 if the dirent should be ignored
-typedef int (*filter)(context *, char[DNAME_LENGTH]);
+typedef filter_result (*filter)(context *, char[DNAME_LENGTH]);
 typedef void (*printer)(context *, char[DNAME_LENGTH]);
 
 // Walk through directories and files, recursively
@@ -29,5 +35,9 @@ typedef void (*printer)(context *, char[DNAME_LENGTH]);
 // Filter and printer are the function to be used to filter files and to print
 // results
 int walk_from(char path[], filter filters[], printer printer);
+
+// Concat path from a context with a filename, in order to create a complete
+// path. Stores the result in result.
+void complete_path(context *ctxt, char *path, char *result);
 
 #endif
