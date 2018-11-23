@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
             fprintf(stderr, "option -i\n");
             i_flag = 1;
             image_init();
-            filters[0] = image_filter;
+            add_to_filters(image_filter);
             break;
 
         case 'l':
