@@ -13,6 +13,7 @@
 // To code result of filter, to compel ourselves to write it explicitely
 typedef enum {
   FILTER_IGNORE=18, // Ignore current element
+  FILTER_CONTINUE=38, // Continue to explore with current element, but don’t print it
   FILTER_KEEP=180   // Keep current element
 } filter_result;
 

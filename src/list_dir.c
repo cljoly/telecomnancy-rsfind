@@ -51,49 +51,54 @@ void free_context(context *ctxt) {
 // directory should be ignored.
 int dir_walker(context *ctxt, filter filters[], printer printer) {
     // Apply filters to a file, to know whether the file is to be explored
-    int apply_filter(struct dirent * file) {
-        // Whether the file should be ignored
-        int ignore = 0;
+    filter_result apply_filter(struct dirent * file) {
+        filter_result action = FILTER_KEEP;
         int filter_ind = 0;
-        int filter_result = 0;
-        ignore = 0;
-        while (!ignore && filters[filter_ind] != NULL) {
+        filter_result filter_result = FILTER_KEEP;
+        while (action != FILTER_IGNORE && filters[filter_ind] != NULL) {
             filter_result = filters[filter_ind](ctxt, file->d_name);
-            switch (filter_result) {
-            case FILTER_IGNORE:
-                ignore = 1;
-                break;
-            case FILTER_KEEP:
-                ignore = 0;
-                break;
+            if (filter_result < action) {
+                // XXX
+                action = filter_result;
             }
             filter_ind++;
         }
-        return ignore;
+        return action;
     }
     struct dirent *file;
     // Result of filter functions
     DIR *dir = opendir(ctxt->dir_name);
     if (dir == NULL) {
-        printf("dir is NULL, %i\n", errno);
+        fprintf(stderr, "dir is NULL, %i\n", errno);
         return errno;
     }
     // TODO Treat errno after while loop
     while ((file = readdir(dir)) != NULL) {
-        int ignore = apply_filter(file);
-        if (!ignore) {
-            if (!strcmp(file->d_name, ".") || !strcmp(file->d_name, "..")) {
-                // Don’t iterate over current directory
-            } else if (file->d_type == DT_REG) { // Regular file
-                printer(ctxt, file->d_name);
-            } else if (file->d_type == DT_DIR) {
-                printer(ctxt, file->d_name);
-                context *next_ctxt = create_context_from_dirent(ctxt, file);
-                dir_walker(next_ctxt, filters, printer);
-                free_context(next_ctxt);
-            }
-            // XXX Ignoring other file types…
+        // Apply filter
+        filter_result filter_action;
+        if (!strcmp(file->d_name, ".") || !strcmp(file->d_name, "..")) {
+            // Don’t iterate over current directory
+            filter_action = FILTER_IGNORE;
         }
+        else {
+          filter_action = apply_filter(file);
+        }
+        // Print current filename or not
+        switch(filter_action) {
+            case FILTER_IGNORE: break;
+            case FILTER_CONTINUE: break;
+            case FILTER_KEEP:
+              printer(ctxt, file->d_name);
+              break;
+
+        }
+          // Iterate over next folder
+          if (filter_action != FILTER_IGNORE && file->d_type == DT_DIR) {
+              context *next_ctxt = create_context_from_dirent(ctxt, file);
+              dir_walker(next_ctxt, filters, printer);
+              free_context(next_ctxt);
+          }
+          // XXX Ignoring other file types…
     }
     closedir(dir);
     return 0;
