@@ -9,11 +9,14 @@ out_radix=/tmp/rstest_
 RED='\033[1;31m'
 GRN='\033[0;32m'
 YLW='\033[0;33m'
+REY='\033[0;34m'
 NC='\033[0m' # No Color
 
 retcode=0
 for i in $(seq 0 $(jq -r '.commands | length - 1' < $data)); do
+    printf "${REY}=========================${NC}\n"
     for folder_i in $(seq 0 $(jq -r '.folders | length - 1' < $data)); do
+        printf "${REY}-------------------------${NC}\n"
         folder=$(jq -r ".folders[$folder_i]" <$data)
         jq_args="-r --arg jqfolder $folder --argjson i $i"
 
@@ -23,7 +26,9 @@ for i in $(seq 0 $(jq -r '.commands | length - 1' < $data)); do
         out_a="${out_radix}_${i}_${id}_a"
         out_b="${out_radix}_${i}_${id}_b"
         sh -c "$cmd_a" >"$out_a" 2>"${out_a}_err"
+        # $cmd_a >"$out_a" 2>"${out_a}_err"
         sh -c "$cmd_b" >"$out_b" 2>"${out_a}_err"
+        # $cmd_b >"$out_b" 2>"${out_a}_err"
 
         cmp "$out_a" "$out_b" 2>/dev/null >/dev/null
         equal=$?
