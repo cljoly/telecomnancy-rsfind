@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
             abort();
         }
     }
-   
+
     /* Print any remaining command line arguments (not options). */
     if (optind < argc) {
         path = argv[optind++];
