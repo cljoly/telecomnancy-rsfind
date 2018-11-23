@@ -79,26 +79,26 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
         if (!strcmp(file->d_name, ".") || !strcmp(file->d_name, "..")) {
             // Don’t iterate over current directory
             filter_action = FILTER_IGNORE;
-        }
-        else {
-          filter_action = apply_filter(file);
+        } else {
+            filter_action = apply_filter(file);
         }
         // Print current filename or not
-        switch(filter_action) {
-            case FILTER_IGNORE: break;
-            case FILTER_CONTINUE: break;
-            case FILTER_KEEP:
-              printer(ctxt, file->d_name);
-              break;
-
+        switch (filter_action) {
+        case FILTER_IGNORE:
+            break;
+        case FILTER_CONTINUE:
+            break;
+        case FILTER_KEEP:
+            printer(ctxt, file->d_name);
+            break;
         }
-          // Iterate over next folder
-          if (filter_action != FILTER_IGNORE && file->d_type == DT_DIR) {
-              context *next_ctxt = create_context_from_dirent(ctxt, file);
-              dir_walker(next_ctxt, filters, printer);
-              free_context(next_ctxt);
-          }
-          // XXX Ignoring other file types…
+        // Iterate over next folder
+        if (filter_action != FILTER_IGNORE && file->d_type == DT_DIR) {
+            context *next_ctxt = create_context_from_dirent(ctxt, file);
+            dir_walker(next_ctxt, filters, printer);
+            free_context(next_ctxt);
+        }
+        // XXX Ignoring other file types…
     }
     closedir(dir);
     return 0;
