@@ -42,5 +42,5 @@
             "b": "echo Fin des tests 🎉"
         }
     ],
-    "folders": [ "./file_struct", "/tmp/"]
+    "folders": [ "./file_struct", "./file_struct/", "/tmp", "/tmp/"]
 }
