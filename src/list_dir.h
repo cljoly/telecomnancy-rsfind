@@ -11,8 +11,10 @@
 #define DNAME_LENGTH 256
 
 // To code result of filter, to compel ourselves to write it explicitely
+// The lowest filter from all result is kept
 typedef enum {
   FILTER_IGNORE=18, // Ignore current element
+  FILTER_CONTINUE=38, // Continue to explore with current element, but don’t print it
   FILTER_KEEP=180   // Keep current element
 } filter_result;
 

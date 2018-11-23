@@ -54,7 +54,7 @@ filter_result image_filter(context *ctxt, char *path) {
             ctxt->dir_name);
     int traverse = is_in_set(traverse_mimes, file_type);
     if (traverse) {
-        return FILTER_KEEP;
+        return FILTER_CONTINUE;
     } else {
         int is_image = is_image_mime(file_type);
         if (is_image)
