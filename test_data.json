@@ -30,6 +30,10 @@
             "b": "find $folder -type f -exec file {} \\; | grep image | cut -d : -f 1"
         },
         {
+            "a": "./rsfind ./file_struct/jpg -i",
+            "b": "find ./file_struct/jpg -type f -exec file {} \\; | grep image | cut -d : -f 1"
+        },
+        {
             "a": "./rsfind $folder -l",
             "b": "find $folder -exec ls -l -d {} \\;"
         },

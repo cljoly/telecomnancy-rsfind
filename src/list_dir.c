@@ -106,9 +106,13 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
 }
 
 // Path: name of the directory to explore from
-int walk_from(char path[], filter filters[], printer printer) {
+int walk_from(char path[], filter filters[], printer printer, int flag_i) {
     // First printing on path, like printf
-    printer(NULL, path);
+    // FIXME Don’t use a flag, generalise
+    if (!flag_i) {
+      printer(NULL, path);
+    }
+
     context *ctxt = create_context(NULL, path);
     strncpy(ctxt->dir_name, path, DNAME_LENGTH);
     ctxt->last = NULL;

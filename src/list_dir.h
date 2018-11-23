@@ -38,7 +38,8 @@ typedef void (*printer)(context *, char[DNAME_LENGTH]);
 // Path: name of the directory to explore from
 // Filter and printer are the function to be used to filter files and to print
 // results
-int walk_from(char path[], filter filters[], printer printer);
+// TODO Remove flag_i, tmp to mark -i is used
+int walk_from(char path[], filter filters[], printer printer, int flag_i);
 
 // Concat path from a context with a filename, in order to create a complete
 // path. Stores the result in result.
