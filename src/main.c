@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     // Ajout des fonctions de filtre à l’ensemble des filtres
     void add_to_filters(filter f) {
         int i = 0;
-        while (filters[i] == NULL) {
+        while (filters[i] != NULL) {
             i++;
         }
         filters[i] = f;
