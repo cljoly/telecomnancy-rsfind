@@ -29,13 +29,13 @@ context *create_context_from_dirent(context *last, struct dirent *d) {
 }
 
 void complete_path(context *ctxt, char *path, char *result) {
-  if (ctxt == NULL) {
-        char* path = "./";
+    if (ctxt == NULL) {
+        char *path = "./";
         strcpy(result, path);
     } else {
         strncpy(result, ctxt->dir_name, DNAME_LENGTH);
-  			strncat(result, "/", DNAME_LENGTH);
-  			strncat(result, path, DNAME_LENGTH);
+        strncat(result, "/", DNAME_LENGTH);
+        strncat(result, path, DNAME_LENGTH);
     }
 }
 
@@ -59,9 +59,13 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
         ignore = 0;
         while (!ignore && filters[filter_ind] != NULL) {
             filter_result = filters[filter_ind](ctxt, file->d_name);
-            switch(filter_result){
-              case FILTER_IGNORE: ignore = 1; break;
-              case FILTER_KEEP: ignore = 0; break;
+            switch (filter_result) {
+            case FILTER_IGNORE:
+                ignore = 1;
+                break;
+            case FILTER_KEEP:
+                ignore = 0;
+                break;
             }
             filter_ind++;
         }

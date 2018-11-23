@@ -1,6 +1,6 @@
+#include "image_search.h"
 #include "list_dir.h"
 #include "printers.h"
-#include "image_search.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,23 +16,21 @@ int main(int argc, char **argv) {
     char *path = ".";
     // XXX Should be big enough ;-)
     filter filters[] = {
-                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     };
     // Ajout des fonctions de filtre à l’ensemble des filtres
     void add_to_filters(filter f) {
-      int i = 0;
-      while (filters[i] == NULL) {
-        i++;
-      }
-      filters[i] = f;
+        int i = 0;
+        while (filters[i] == NULL) {
+            i++;
+        }
+        filters[i] = f;
     }
 
     ///////flags
@@ -89,7 +87,7 @@ int main(int argc, char **argv) {
             break;
 
         case 'i':
-          fprintf(stderr, "option -i\n");
+            fprintf(stderr, "option -i\n");
             i_flag = 1;
             image_init();
             filters[0] = image_filter;
@@ -129,7 +127,7 @@ int main(int argc, char **argv) {
 
     /* Print any remaining command line arguments (not options). */
     if (optind < argc) {
-      path = argv[optind++];
+        path = argv[optind++];
     }
 
     walk_from(path, filters, printer);
