@@ -51,12 +51,12 @@ void free_context(context *ctxt) {
 // directory should be ignored.
 int dir_walker(context *ctxt, filter filters[], printer printer) {
     // Apply filters to a file, to know whether the file is to be explored
-    filter_result apply_filter(struct dirent * file) {
+    filter_result apply_filter(struct dirent * file, int is_folder) {
         filter_result action = FILTER_KEEP;
         int filter_ind = 0;
         filter_result filter_result = FILTER_KEEP;
         while (action != FILTER_IGNORE && filters[filter_ind] != NULL) {
-            filter_result = filters[filter_ind](ctxt, file->d_name);
+            filter_result = filters[filter_ind](ctxt, file->d_name, is_folder);
             if (filter_result < action) {
                 // XXX
                 action = filter_result;
@@ -74,13 +74,14 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
     }
     // TODO Treat errno after while loop
     while ((file = readdir(dir)) != NULL) {
+        int is_folder = file->d_type == DT_DIR;
         // Apply filter
         filter_result filter_action;
         if (!strcmp(file->d_name, ".") || !strcmp(file->d_name, "..")) {
             // Don’t iterate over current directory
             filter_action = FILTER_IGNORE;
         } else {
-            filter_action = apply_filter(file);
+            filter_action = apply_filter(file, is_folder);
         }
         // Print current filename or not
         switch (filter_action) {
@@ -93,7 +94,7 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
             break;
         }
         // Iterate over next folder
-        if (filter_action != FILTER_IGNORE && file->d_type == DT_DIR) {
+        if (filter_action != FILTER_IGNORE && is_folder) {
             context *next_ctxt = create_context_from_dirent(ctxt, file);
             dir_walker(next_ctxt, filters, printer);
             free_context(next_ctxt);

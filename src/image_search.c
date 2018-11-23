@@ -46,14 +46,15 @@ int is_image_mime(const char mime_type[]) {
 
 // A filter, as defined in list_dir.h
 // The magic cookie (see libmagic(3)) must have been initiliased
-filter_result image_filter(context *ctxt, char *path) {
+filter_result image_filter(context *ctxt, char *path, int is_folder) {
     char cpl_path[DNAME_LENGTH];
     complete_path(ctxt, path, cpl_path);
     const char *file_type = magic_file(cookie, cpl_path);
     fprintf(stderr, "FILE TYPE: '%s' (%s %s)\n", file_type, path,
             ctxt->dir_name);
-    int traverse = is_in_set(traverse_mimes, file_type);
-    if (traverse) {
+    // TODO Compare is_folder & traverse, to make sure both are working well
+    /* int traverse = is_in_set(traverse_mimes, file_type); */
+    if (is_folder) {
         return FILTER_CONTINUE;
     } else {
         int is_image = is_image_mime(file_type);

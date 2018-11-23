@@ -28,8 +28,10 @@ typedef struct ctxt {
     char *dir_name;
 } context;
 
-// To filter a path. Returns 1 if the dirent should be ignored
-typedef filter_result (*filter)(context *, char[DNAME_LENGTH]);
+// To filter a path. Last arguments tells if current file is a folder or not.
+// See filter_result for return type meaning.
+typedef filter_result (*filter)(context *, char[DNAME_LENGTH], int);
+// Function used to print result
 typedef void (*printer)(context *, char[DNAME_LENGTH]);
 
 // Walk through directories and files, recursively
