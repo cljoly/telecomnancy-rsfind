@@ -33,14 +33,6 @@ int main(int argc, char **argv) {
         filters[i] = f;
     }
 
-    ///////flags
-    // FIXME Delete this? (may not be used)
-    static int l_flag;
-    static int t_flag;
-    static int i_flag;
-    static int name_flag;
-    static int exec_flag;
-
     ///////values
     char name;
     char exec;
@@ -51,8 +43,8 @@ int main(int argc, char **argv) {
     while (1) {
         static struct option long_options[] = {
             /* These options set a flag. */
-            {"name", required_argument, &name_flag, 1},
-            {"exec", required_argument, &exec_flag, 1},
+            {"name", required_argument, 0, 1},
+            {"exec", required_argument, 0, 1},
             {"listing_long", no_argument, 0, 'l'},
             {"chaine", required_argument, 0, 't'},
             {"is_image", no_argument, 0, 'i'},
@@ -88,20 +80,16 @@ int main(int argc, char **argv) {
 
         case 'i':
             fprintf(stderr, "option -i\n");
-            i_flag = 1;
             image_init();
             add_to_filters(image_filter);
             break;
 
         case 'l':
-            puts("option -l\n");
-            l_flag = 1;
             printer = complete_printer;
             break;
 
         case 't':
             printf("option -t with value '%s'\n", optarg);
-            t_flag = 1;
             break;
 
         case '?':
@@ -112,19 +100,7 @@ int main(int argc, char **argv) {
             abort();
         }
     }
-
-    /* Instead of reporting ‘--verbose’
-       and ‘--brief’ as they are encountered,
-       we report the final status resulting from them. */
-    if (name_flag)
-        puts("name flag is set");
-
-    if (exec_flag)
-        puts("exec flag is set");
-
-    if (l_flag || i_flag || t_flag)
-        puts("ok");
-
+   
     /* Print any remaining command line arguments (not options). */
     if (optind < argc) {
         path = argv[optind++];
