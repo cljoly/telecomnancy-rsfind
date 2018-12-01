@@ -14,6 +14,6 @@ build:
 test:
   script:
     # Test a few cases, to be grown
-    - ./test.sh 0:3
+    - DIFF=1 ./test.sh 0:3
 
 # TODO Test dynamic loading of libmagic

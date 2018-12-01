@@ -6,7 +6,6 @@
 data="test_data.json"
 name="name"
 command="echo"
-rsfind_bin=$1
 out_radix=/tmp/rstest_
 test_range=$1
 
@@ -17,7 +16,7 @@ REY='\033[0;34m'
 NC='\033[0m' # No Color
 
 retcode=0
-for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]|numbers)" < $data); do
+for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]?|numbers)" < $data); do
     printf "${REY}=========================${NC}\n"
     for folder_i in $(seq 0 $(jq -r '.folders | length - 1' < $data)); do
         printf "${REY}-------------------------${NC}\n"
@@ -43,6 +42,10 @@ for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]|numbers)" <
         else
             printf "${RED}TEST $i.$folder_i: ❌${NC} ${cmd_a} ≠ ${cmd_b}\n"
             printf "${YLW}diff $out_a $out_b${NC}\n"
+            echo $DIFF
+            if [ ${DIFF:-0} -eq 1 ]; then
+                diff $out_a $out_b
+            fi
             retcode=1
         fi
     done
