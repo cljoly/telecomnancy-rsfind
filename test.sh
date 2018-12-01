@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
+# You may pass a range of test like 1:3 or 9 as first argument
+# test.sh 1:3 will run test 1 and 2 (not 3)
+
 data="test_data.json"
 name="name"
 command="echo"
 rsfind_bin=$1
 out_radix=/tmp/rstest_
+test_range=$1
 
 RED='\033[1;31m'
 GRN='\033[0;32m'
@@ -13,7 +17,7 @@ REY='\033[0;34m'
 NC='\033[0m' # No Color
 
 retcode=0
-for i in $(seq 0 $(jq -r '.commands | length - 1' < $data)); do
+for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]|numbers)" < $data); do
     printf "${REY}=========================${NC}\n"
     for folder_i in $(seq 0 $(jq -r '.folders | length - 1' < $data)); do
         printf "${REY}-------------------------${NC}\n"
