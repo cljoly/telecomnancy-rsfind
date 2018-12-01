@@ -1,0 +1,16 @@
+Things to do for the 0.17 release:
+
+Repair broken images, as per bug 3745:
+    https://bugs.freedesktop.org/show_bug.cgi?id=3745
+
+Check the wiki for any edit requests.
+
+Do author authority control.
+ * Clean out leading and trailing whitespace.
+ * Merge Architetto Francesco Rollandin as per the messages from imia@email.it
+
+Delete the 44 broken files that should be replaced by the fixed files
+   in 37_fixed_files.zip for release 0.17.  Otherwise we will probably
+   end up with duplicates and just as many broken files as before.  A
+   shell script to do the deletion is here:
+   http://www.argentum.freeserve.co.uk/rmbroken
