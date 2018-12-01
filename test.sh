@@ -42,11 +42,15 @@ for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]?|numbers)" 
         else
             printf "${RED}TEST $i.$folder_i: ❌${NC} ${cmd_a} ≠ ${cmd_b}\n"
             printf "${YLW}diff $out_a $out_b${NC}\n"
-            echo $DIFF
             if [ ${DIFF:-0} -eq 1 ]; then
                 diff $out_a $out_b
             fi
             retcode=1
+            echo $STOP
+            if [ ${STOP:-0} -eq 1 ]; then
+                return $retcode
+                exit $retcode
+            fi
         fi
     done
 done
