@@ -1,0 +1,13 @@
+before_script:
+  - apt-get update -qq && apt-get install -y -qq jq libmagic-dev
+
+build:
+  script:
+    - make
+
+test:
+  script:
+    # Test a few cases, to be grown
+    - test.sh 0:3
+
+# TODO Test dynamic loading of libmagic
