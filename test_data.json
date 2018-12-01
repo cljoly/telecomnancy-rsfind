@@ -27,24 +27,28 @@
         },
         {
             "a": "./rsfind $folder -i",
-            "b": "find $folder -type f -exec file {} \\; | grep image | cut -d : -f 1"
+            "b": "find $folder -type f -exec file '{}' \\; | grep image | cut -d : -f 1"
         },
         {
             "a": "./rsfind ./file_struct/jpg -i",
-            "b": "find ./file_struct/jpg -type f -exec file {} \\; | grep image | cut -d : -f 1"
+            "b": "find ./file_struct/jpg -type f -exec file '{}' \\; | grep image | cut -d : -f 1"
         },
         {
             "a": "./rsfind $folder -l",
-            "b": "find $folder -exec ls -l -d {} \\;"
+            "b": "find $folder -exec ls -l -d '{}' \\;"
+        },
+        {
+            "a": "./rsfind $folder --exec \"echo {}\"",
+            "b": "find $folder -exec echo '{}' \\;"
         },
         {
             "a": "./rsfind $folder --exec \"file {}\"",
-            "b": "find $folder -exec file {} \\;"
+            "b": "find $folder -exec file '{}' \\;"
         },
         {
-            "a": "echo Fin des tests 🎉",
-            "b": "echo Fin des tests 🎉"
+            "a": "./rsfind −l −t human −i /usr/share/openclipart/svg/",
+            "b": "find $folder -exec file '{}' \\;"
         }
     ],
-    "folders": [ "./file_struct", "./file_struct/", "/tmp", "/tmp/"]
+    "folders": [ "./file_struct", "./file_struct/openclipart-svg", "./file_struct/", "/tmp", "/tmp/"]
 }
