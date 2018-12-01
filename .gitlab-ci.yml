@@ -8,10 +8,12 @@ stages:
   - test
 
 build:
+  stage: build
   script:
     - make
 
 test:
+  stage: test
   script:
     # Test a few cases, to be grown
     - DIFF=1 ./test.sh 0:3
