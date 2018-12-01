@@ -1,7 +1,7 @@
 image: debian:stretch
 
 before_script:
-  - apt-get update -qq && apt-get install -y -qq jq libmagic-dev make
+  - apt-get update -qq && apt-get install -y -qq jq libmagic-dev make gcc
 
 stages:
   - build
