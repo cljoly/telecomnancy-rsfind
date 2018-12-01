@@ -10,10 +10,7 @@ context *create_context(context *last, char *path) {
         return NULL;
     }
     char *dir_name = (char *)calloc(DNAME_LENGTH, sizeof(char));
-    if (last != NULL)
-        strncpy(dir_name, last->dir_name, DNAME_LENGTH);
-    strncat(dir_name, "/", DNAME_LENGTH);
-    strncat(dir_name, path, DNAME_LENGTH);
+    complete_path(last, path, dir_name);
     ctxt->dir_name = dir_name;
     ctxt->last = last;
     return ctxt;
@@ -29,14 +26,17 @@ context *create_context_from_dirent(context *last, struct dirent *d) {
 }
 
 void complete_path(context *ctxt, char *path, char *result) {
-    if (ctxt == NULL) {
-        char *path = "./";
-        strcpy(result, path);
-    } else {
-        strncpy(result, ctxt->dir_name, DNAME_LENGTH);
-        strncat(result, "/", DNAME_LENGTH);
-        strncat(result, path, DNAME_LENGTH);
+  if (ctxt == NULL) {
+    strcpy(result, path);
+  } else {
+    int dir_len = strlen(ctxt->dir_name);
+    const char *last_dir = ctxt->dir_name+dir_len-1;
+    strncpy(result, ctxt->dir_name, DNAME_LENGTH);
+    if (strncmp(last_dir, "/", 1) != 0) {
+      strncat(result, "/", DNAME_LENGTH);
     }
+    strncat(result, path, DNAME_LENGTH);
+  }
 }
 
 // TODO Free context

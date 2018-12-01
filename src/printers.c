@@ -1,11 +1,9 @@
 #include "printers.h"
 
 void basic_printer(context *ctxt, char file[]) {
-    if (ctxt == NULL) {
-        printf("%s\n", file);
-    } else {
-        printf("%s/%s\n", ctxt->dir_name, file);
-    }
+  char *path = (char *)malloc(DNAME_LENGTH*sizeof(char));
+  complete_path(ctxt, file, path);
+  printf("%s\n", path);
 }
 
 void complete_printer(context *ctxt, char file[]) {
