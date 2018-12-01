@@ -30,6 +30,11 @@ for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]?|numbers)" 
         out_b="${out_radix}_${i}_${id}_b"
         sh -c "$cmd_a" >"$out_a" 2>"${out_a}_err"
         # $cmd_a >"$out_a" 2>"${out_a}_err"
+        # Detect segfault & co
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}NZES"
+            echo NON ZERO EXIT STATUS >> $out_a
+        fi
         sh -c "$cmd_b" >"$out_b" 2>"${out_a}_err"
         # $cmd_b >"$out_b" 2>"${out_a}_err"
 
