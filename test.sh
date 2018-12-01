@@ -9,6 +9,12 @@ command="echo"
 out_radix=/tmp/rstest_
 test_range=$1
 
+# Number of test passing / failing
+nb_test=0
+nb_fail_test=0
+
+RED_BG='\033[1;41m'
+GRN_BG='\033[0;42m'
 RED='\033[1;31m'
 GRN='\033[0;32m'
 YLW='\033[0;33m'
@@ -32,12 +38,13 @@ for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]?|numbers)" 
         # $cmd_a >"$out_a" 2>"${out_a}_err"
         # Detect segfault & co
         if [ $? -ne 0 ]; then
-            echo -e "${RED}NZES"
+            echo -e "${RED}☠️ Non zero exit status${NC}"
             echo NON ZERO EXIT STATUS >> $out_a
         fi
         sh -c "$cmd_b" >"$out_b" 2>"${out_a}_err"
         # $cmd_b >"$out_b" 2>"${out_a}_err"
 
+        nb_test=`expr $nb_test + 1`
         cmp "$out_a" "$out_b" 2>/dev/null >/dev/null
         equal=$?
         if [ $equal -eq 0 ]; then
@@ -45,6 +52,7 @@ for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]?|numbers)" 
             # Should print nothing
             diff $out_a $out_b
         else
+            nb_fail_test=`expr $nb_fail_test + 1`
             printf "${RED}TEST $i.$folder_i: ❌${NC} ${cmd_a} ≠ ${cmd_b}\n"
             printf "${YLW}diff $out_a $out_b${NC}\n"
             if [ ${DIFF:-0} -eq 1 ]; then
@@ -57,4 +65,14 @@ for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]?|numbers)" 
         fi
     done
 done
+
+if [ $nb_fail_test -eq 0 ]; then
+    echo -e "🎉 ${GRN_BG} ${nb_test}/${nb_test} passing ${NC}"
+else
+    echo -e "🔥 ${RED_BG} ${nb_fail_test}/${nb_test} failing ${NC}"
+fi
+for i in $(seq 1 $nb_fail_test); do
+    printf "🔥"
+done
+echo ""
 exit $retcode
