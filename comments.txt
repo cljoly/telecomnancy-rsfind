@@ -1,3 +1,4 @@
+Compilation with dynamic libraries: not ok
 rsfind DOSSIER = find DOSSIER: ok
 rsfind DOSSIER --name CHAINE = find DOSSIER -name CHAINE: not ok
 rsfind DOSSIER --print = find DOSSIER -print: ok
@@ -5,3 +6,5 @@ rsfind DOSSIER -t CHAINE = grep -r -l DOSSIER -e CHAINE: not ok
 rsfind DOSSIER -i = find DOSSIER -type f -exec file {} \; | grep image | cut -d : -f 1: not ok
 rsfind DOSSIER -l = find DOSSIER -exec ls -l -d {} \;: not ok
 rsfind DOSSIER --exec "COMMANDE" = find DOSSIER -exec COMMANDE \;: not ok
+rsfind DOSSIER --ename REGEXP = find DOSSIER -name REGEXP: not ok
+rsfind DOSSIER -T REGEXP = grep -r -l DOSSIER -e REGEXP: not ok
