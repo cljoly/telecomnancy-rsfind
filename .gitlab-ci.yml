@@ -20,7 +20,7 @@ test_fait:
     # Just to be sure
     - make
     # Test a few cases, to be grown
-    - DIFF=1 ./test.sh 0:6
+    - DIFF=1 ./test.sh 0,1,2,5,7,8
 
 test_all:
   allow_failure: true
