@@ -14,13 +14,8 @@
             "b": "find $folder"
         },
         {
-            "a": "./rsfind /tmp",
+            "a": "./rsfind ./file_stuct/tmp",
             "b": "find /tmp",
-            "return_code": 1
-        },
-        {
-            "a": "./rsfind /tmp/",
-            "b": "find /tmp/",
             "return_code": 1
         },
         {
