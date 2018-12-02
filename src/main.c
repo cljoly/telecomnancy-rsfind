@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
         path = argv[optind++];
     }
 
-    walk_from(path, filters, printer, flag_i);
+    int ret = walk_from(path, filters, printer, flag_i);
 
-    exit(0);
+    exit(ret);
 }

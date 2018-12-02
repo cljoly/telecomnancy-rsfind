@@ -65,15 +65,19 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
         }
         return action;
     }
+
     struct dirent *file;
     // Result of filter functions
     DIR *dir = opendir(ctxt->dir_name);
+    // Return value
+    int ret = 0;
     if (dir == NULL) {
         fprintf(stderr, "dir is NULL, %i\n", errno);
-        return errno;
+        ret = 1;
+        return ret;
     }
     // TODO Treat errno after while loop
-    while ((file = readdir(dir)) != NULL) {
+    while (!ret && (file = readdir(dir)) != NULL) {
         int is_folder = file->d_type == DT_DIR;
         // Apply filter
         filter_result filter_action;
@@ -96,13 +100,13 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
         // Iterate over next folder
         if (filter_action != FILTER_IGNORE && is_folder) {
             context *next_ctxt = create_context_from_dirent(ctxt, file);
-            dir_walker(next_ctxt, filters, printer);
+            ret = ret || dir_walker(next_ctxt, filters, printer);
             free_context(next_ctxt);
         }
         // XXX Ignoring other file types…
     }
     closedir(dir);
-    return 0;
+    return ret;
 }
 
 // Path: name of the directory to explore from
