@@ -38,8 +38,8 @@ for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]?|numbers)" 
         # $cmd_a >"$out_a" 2>"${out_a}_err"
         # Check return code, 0 by default
         if [ $? -ne $(jq -r ".commands[${i}].return_code // 0" < $data) ]; then
-            echo -e "${RED}☠️ Non expected exit status${NC}"
-            echo NON EXPECTED EXIT STATUS >> $out_a
+            echo -e "${RED}☠️ Not expected exit status${NC}"
+            printf NOT EXPECTED EXIT STATUS >> $out_a
         fi
         sh -c "$cmd_b" >"$out_b" 2>"${out_a}_err"
         # $cmd_b >"$out_b" 2>"${out_a}_err"
