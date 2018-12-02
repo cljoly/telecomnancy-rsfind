@@ -12,7 +12,6 @@ int main(int argc, char **argv) {
     // These variables will be modified as argument are parsed and
     // then used with walk_from. Default values have been chosen so as to make
     // rsfind behave like find when no arguments are passed.
-    printer printer = basic_printer;
     char *path = ".";
     // XXX Should be big enough ;-)
     filter filters[] = {
@@ -22,15 +21,32 @@ int main(int argc, char **argv) {
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
     };
     // Ajout des fonctions de filtre à l’ensemble des filtres
     void add_to_filters(filter f) {
+      int i = 0;
+      while (filters[i] != NULL) {
+        i++;
+      }
+      filters[i] = f;
+    }
+    printer printers[] = {
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+    };
+    // Ajout des fonctions d’affachage à l’ensemble des affichages
+    void add_to_printers(printer f) {
         int i = 0;
-        while (filters[i] != NULL) {
+        while (printers[i] != NULL) {
             i++;
         }
-        filters[i] = f;
+        printers[i] = f;
     }
 
     ///////values
@@ -89,7 +105,7 @@ int main(int argc, char **argv) {
             break;
 
         case 'l':
-            printer = complete_printer;
+            add_to_printers(complete_printer);
             break;
 
         case 't':
@@ -108,6 +124,12 @@ int main(int argc, char **argv) {
     /* Print any remaining command line arguments (not options). */
     if (optind < argc) {
         path = argv[optind++];
+    }
+
+    // Use default printer if nothing else was choosen
+    if (printers[0] == NULL) {
+      printers[1] = basic_printer;
+      printers[2] = NULL;
     }
 
     int ret = walk_from(path, filters, printer, flag_i);

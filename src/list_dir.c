@@ -45,6 +45,14 @@ void free_context(context *ctxt) {
     free(ctxt);
 }
 
+// Run each printer in a NULL terminated array
+void apply_each_printer(filter filters[], context *ctxt, char *path) {
+  int i = 0;
+  while (filters[i] != NULL) {
+    filters[i](ctxt, path);
+  }
+}
+
 // Walker through directories and files, recursively
 // Context must point to a folder
 // Filter is a NULL terminated array of functions telling whether the file or
@@ -110,7 +118,7 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
 }
 
 // Path: name of the directory to explore from
-int walk_from(char path[], filter filters[], printer printer, int flag_i) {
+int walk_from(char path[], filter filters[], printer printer[], int flag_i) {
     // First printing on path, like printf
     // FIXME Don’t use a flag, generalise
     if (!flag_i) {
