@@ -46,10 +46,11 @@ void free_context(context *ctxt) {
 }
 
 // Run each printer in a NULL terminated array
-void apply_each_printer(filter filters[], context *ctxt, char *path) {
+void apply_each_printer(printer printers[], context *ctxt, char *path) {
   int i = 0;
-  while (filters[i] != NULL) {
-    filters[i](ctxt, path);
+  while (printers[i] != NULL) {
+    printers[i](ctxt, path);
+    i++;
   }
 }
 
@@ -57,7 +58,7 @@ void apply_each_printer(filter filters[], context *ctxt, char *path) {
 // Context must point to a folder
 // Filter is a NULL terminated array of functions telling whether the file or
 // directory should be ignored.
-int dir_walker(context *ctxt, filter filters[], printer printer) {
+int dir_walker(context *ctxt, filter filters[], printer printers[]) {
     // Apply filters to a file, to know whether the file is to be explored
     filter_result apply_filter(struct dirent * file, int is_folder) {
         filter_result action = FILTER_KEEP;
@@ -102,13 +103,13 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
         case FILTER_CONTINUE:
             break;
         case FILTER_KEEP:
-            printer(ctxt, file->d_name);
+            apply_each_printer(printers, ctxt, file->d_name);
             break;
         }
         // Iterate over next folder
         if (filter_action != FILTER_IGNORE && is_folder) {
             context *next_ctxt = create_context_from_dirent(ctxt, file);
-            ret = ret || dir_walker(next_ctxt, filters, printer);
+            ret = ret || dir_walker(next_ctxt, filters, printers);
             free_context(next_ctxt);
         }
         // XXX Ignoring other file types…
@@ -118,15 +119,15 @@ int dir_walker(context *ctxt, filter filters[], printer printer) {
 }
 
 // Path: name of the directory to explore from
-int walk_from(char path[], filter filters[], printer printer[], int flag_i) {
+int walk_from(char path[], filter filters[], printer printers[], int flag_i) {
     // First printing on path, like printf
     // FIXME Don’t use a flag, generalise
     if (!flag_i) {
-      printer(NULL, path);
+      apply_each_printer(printers, NULL, path);
     }
 
     context *ctxt = create_context(NULL, path);
     strncpy(ctxt->dir_name, path, DNAME_LENGTH);
     ctxt->last = NULL;
-    return dir_walker(ctxt, filters, printer);
+    return dir_walker(ctxt, filters, printers);
 }

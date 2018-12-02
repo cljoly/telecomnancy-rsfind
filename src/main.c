@@ -128,11 +128,11 @@ int main(int argc, char **argv) {
 
     // Use default printer if nothing else was choosen
     if (printers[0] == NULL) {
-      printers[1] = basic_printer;
-      printers[2] = NULL;
+      printers[0] = basic_printer;
+      printers[1] = NULL;
     }
 
-    int ret = walk_from(path, filters, printer, flag_i);
+    int ret = walk_from(path, filters, printers, flag_i);
 
     exit(ret);
 }
