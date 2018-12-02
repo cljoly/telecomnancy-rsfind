@@ -54,36 +54,37 @@ void apply_each_printer(printer printers[], context *ctxt, char *path) {
   }
 }
 
+// Apply filters to a file, to know whether the file is to be explored
+filter_result apply_each_filter(filter filters[], char file_path[], context *ctxt, int is_folder) {
+  filter_result action = FILTER_KEEP;
+  int filter_ind = 0;
+  filter_result filter_result = FILTER_KEEP;
+  while (action != FILTER_IGNORE && filters[filter_ind] != NULL) {
+    filter_result = filters[filter_ind](ctxt, file_path, is_folder);
+    if (filter_result < action) {
+      // XXX
+      action = filter_result;
+    }
+    filter_ind++;
+  }
+  return action;
+}
+
+
 // Walker through directories and files, recursively
 // Context must point to a folder
 // Filter is a NULL terminated array of functions telling whether the file or
 // directory should be ignored.
 int dir_walker(context *ctxt, filter filters[], printer printers[]) {
-    // Apply filters to a file, to know whether the file is to be explored
-    filter_result apply_filter(struct dirent * file, int is_folder) {
-        filter_result action = FILTER_KEEP;
-        int filter_ind = 0;
-        filter_result filter_result = FILTER_KEEP;
-        while (action != FILTER_IGNORE && filters[filter_ind] != NULL) {
-            filter_result = filters[filter_ind](ctxt, file->d_name, is_folder);
-            if (filter_result < action) {
-                // XXX
-                action = filter_result;
-            }
-            filter_ind++;
-        }
-        return action;
-    }
-
     struct dirent *file;
-    // Result of filter functions
-    DIR *dir = opendir(ctxt->dir_name);
     // Return value
     int ret = 0;
+    // Result of filter functions
+    DIR *dir = opendir(ctxt->dir_name);
     if (dir == NULL) {
-        fprintf(stderr, "dir is NULL, %i\n", errno);
-        ret = 1;
-        return ret;
+      fprintf(stderr, "dir is NULL, %i\n", errno);
+      ret = 1;
+      return ret;
     }
     // TODO Treat errno after while loop
     while (!ret && (file = readdir(dir)) != NULL) {
@@ -94,7 +95,7 @@ int dir_walker(context *ctxt, filter filters[], printer printers[]) {
             // Don’t iterate over current directory
             filter_action = FILTER_IGNORE;
         } else {
-            filter_action = apply_filter(file, is_folder);
+          filter_action = apply_each_filter(filters, file->d_name, ctxt, is_folder);
         }
         // Print current filename or not
         switch (filter_action) {
@@ -119,13 +120,27 @@ int dir_walker(context *ctxt, filter filters[], printer printers[]) {
 }
 
 // Path: name of the directory to explore from
-int walk_from(char path[], filter filters[], printer printers[], int flag_i) {
+int walk_from(char path[], filter filters[], printer printers[]) {
     // First printing on path, like printf
     // FIXME Don’t use a flag, generalise
-    if (!flag_i) {
-      apply_each_printer(printers, NULL, path);
+    int ret = 0;
+    DIR *dir = opendir(path);
+    closedir(dir);
+    if (dir == NULL) {
+      fprintf(stderr, "first dir is NULL, %i\n", errno);
+      ret = 1;
+      return ret;
     }
 
     context *ctxt = create_context(NULL, path);
-    return dir_walker(ctxt, filters, printers);
+    // Consider the path is always a folder…
+    filter_result fr = apply_each_filter(filters, path, ctxt, 1);
+    if (fr == FILTER_KEEP) {
+      apply_each_printer(printers, NULL, path);
+    }
+    if (fr != FILTER_IGNORE) {
+      ret = dir_walker(ctxt, filters, printers);
+    }
+
+    return ret;
 }

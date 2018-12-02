@@ -39,8 +39,7 @@ typedef void (*printer)(context *, char[DNAME_LENGTH]);
 // Filter and printer are the function to be used to filter files and to print
 // results
 // Return 1 if there is an error while traversing files, 0 otherwise
-// TODO Remove flag_i, tmp to mark -i is used
-int walk_from(char path[], filter filters[], printer printer[], int flag_i);
+int walk_from(char path[], filter filters[], printer printer[]);
 
 // Concat path from a context with a filename, in order to create a complete
 // path. Stores the result in result.
