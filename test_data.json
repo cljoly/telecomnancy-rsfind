@@ -21,8 +21,7 @@
         {
             "a": "./rsfind /tmp/",
             "b": "find /tmp/",
-                        "return_code": 1
-
+            "return_code": 1
         },
         {
             "a": "./rsfind $folder --name a-1",
@@ -58,8 +57,8 @@
         },
         {
             "a": "./rsfind −l −t human −i /usr/share/openclipart/svg/",
-            "b": "find $folder -exec file '{}' \\;"
+            "b": "cat ./test_data_openclipart"
         }
     ],
-    "folders": [ "./file_struct", "./file_struct/openclipart-svg", "./file_struct/" ]
+    "folders": [ "./file_struct", "./file_struct/" ]
 }
