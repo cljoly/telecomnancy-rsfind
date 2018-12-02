@@ -56,9 +56,6 @@ int main(int argc, char **argv) {
     ///////getting opts
     int c;
 
-    // TODO Remove this
-    int flag_i = 0;
-
     while (1) {
         static struct option long_options[] = {
             /* These options set a flag. */
@@ -100,7 +97,6 @@ int main(int argc, char **argv) {
         case 'i':
             fprintf(stderr, "option -i\n");
             image_init();
-            flag_i = 1;
             add_to_filters(image_filter);
             break;
 
@@ -132,7 +128,7 @@ int main(int argc, char **argv) {
       printers[1] = NULL;
     }
 
-    int ret = walk_from(path, filters, printers, flag_i);
+    int ret = walk_from(path, filters, printers);
 
     exit(ret);
 }
