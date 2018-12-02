@@ -15,7 +15,7 @@
         },
         {
             "a": "./rsfind ./file_stuct/tmp",
-            "b": "find /tmp",
+            "b": "find ./file_stuct/tmp",
             "return_code": 1
         },
         {
