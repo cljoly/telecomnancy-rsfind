@@ -127,7 +127,5 @@ int walk_from(char path[], filter filters[], printer printers[], int flag_i) {
     }
 
     context *ctxt = create_context(NULL, path);
-    strncpy(ctxt->dir_name, path, DNAME_LENGTH);
-    ctxt->last = NULL;
     return dir_walker(ctxt, filters, printers);
 }
