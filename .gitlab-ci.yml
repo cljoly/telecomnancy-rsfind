@@ -12,7 +12,8 @@ build:
   script:
     - make
 
-test:
+# Test what has been done already
+test_fait:
   stage: test
   script:
     - apt-get install -y -qq jq
@@ -20,5 +21,14 @@ test:
     - make
     # Test a few cases, to be grown
     - DIFF=1 ./test.sh 0:6
+
+test_all:
+  allow_failure: true
+  stage: test
+  script:
+    - apt-get install -y -qq jq
+    # Just to be sure
+    - make
+    - DIFF=1 ./test.sh
 
 # TODO Test dynamic loading of libmagic
