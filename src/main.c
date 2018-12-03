@@ -129,6 +129,7 @@ int main(int argc, char **argv) {
     }
 
     int ret = walk_from(path, filters, printers);
+    magic_free();
 
     exit(ret);
 }
