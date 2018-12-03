@@ -21,7 +21,6 @@ YLW='\033[0;33m'
 REY='\033[0;34m'
 NC='\033[0m' # No Color
 
-retcode=0
 for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]?|numbers)" < $data); do
     printf "${REY}=========================${NC}\n"
     for folder_i in $(seq 0 $(jq -r '.folders | length - 1' < $data)); do
@@ -60,7 +59,7 @@ for i in $(jq -r ".commands | keys | .[${test_range}] | numbers,(.[]?|numbers)" 
             fi
             echo $STOP
             if [ ${STOP:-0} -eq 1 ]; then
-                exit $retcode
+                exit $nb_fail_test
             fi
         fi
     done
@@ -75,4 +74,4 @@ for i in $(seq 1 $nb_fail_test); do
     printf "🔥"
 done
 echo ""
-exit $retcode
+exit $nb_fail_test
