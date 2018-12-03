@@ -12,7 +12,7 @@ void image_init() {
     return;
 }
 
-void image_free() {
+void image_close() {
     if (cookie != NULL) {
         magic_close(cookie);
     }

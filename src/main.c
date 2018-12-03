@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
     }
 
     int ret = walk_from(path, filters, printers);
-    image_free();
+    image_close();
 
     exit(ret);
 }
