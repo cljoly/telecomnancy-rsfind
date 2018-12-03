@@ -16,7 +16,7 @@ build:
 test_fait:
   stage: test
   script:
-    - apt-get install -y -qq jq
+    - apt-get install -y -qq jq file
     # Just to be sure
     - make
     # Test a few cases, to be grown
@@ -26,7 +26,7 @@ test_all:
   allow_failure: true
   stage: test
   script:
-    - apt-get install -y -qq jq
+    - apt-get install -y -qq jq file
     # Just to be sure
     - make
     - DIFF=1 ./test.sh
