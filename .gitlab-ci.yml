@@ -1,7 +1,7 @@
 image: debian:stretch
 
 before_script:
-  - apt-get update -qq && apt-get install -y -qq libmagic-dev make gcc
+  - apt-get update -qq && apt-get install -y -qq make gcc
 
 stages:
   - build
@@ -16,7 +16,7 @@ build:
 test_fait:
   stage: test
   script:
-    - apt-get install -y -qq jq file
+    - apt-get install -y -qq jq file libmagic-dev
     # Just to be sure
     - make
     # Test a few cases, to be grown
@@ -26,9 +26,15 @@ test_all:
   allow_failure: true
   stage: test
   script:
-    - apt-get install -y -qq jq file
+    - apt-get install -y -qq jq file libmagic-dev
     # Just to be sure
     - make
     - DIFF=1 ./test.sh
 
-# TODO Test dynamic loading of libmagic
+# Dynamic loading of libmagic
+test_dyn_magic:
+  stage: test
+  script:
+    - apt-get install -y -qq jq file libmagic-dev
+    - make
+    - DIFF=1 ./test.sh 7,8

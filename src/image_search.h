@@ -1,6 +1,7 @@
 #include "list_dir.h"
-#include <magic.h>
 #include <stdio.h>
+#include <string.h>
+#include <dlfcn.h>
 
 // Initialise magic cookie, required to use image_filter
 void image_init();

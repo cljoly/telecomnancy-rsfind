@@ -1,22 +1,70 @@
 #include "image_search.h"
-#include <string.h>
+
+// Copied from /usr/include/magic.h
+// TODO Use compiler option?
+#define MAGIC_MIME_TYPE     0x0000010 /* Return the MIME type */
+typedef struct magic_set *magic_t;
+// Handle for libmagic
+static void *magic_handle = NULL;
+// Libmagic functions
+static magic_t (*magic_open)(int) = NULL;
+static int (*magic_load)(magic_t, const char*) = NULL;
+static void (*magic_close)(magic_t) = NULL;
+static const char* (*magic_file)(magic_t, const char*) = NULL;
 
 // TODO Place this in a global initialisation function?
 // XXX Make this behave correctly with threads…
 static magic_t cookie = NULL;
 
-void image_init() {
+// Dynamic loading of libmagic
+void image_init_load_libmagic() {
+  magic_handle = dlopen("libmagic.so", RTLD_LAZY);
+  if (magic_handle == NULL) {
+    fprintf(stderr, "Problem loading libmagic with libdl\n");
+  } else {
+    fprintf(stderr, "Libmagic loaded\n");
+  }
+  magic_open = dlsym(magic_handle, "magic_open");
+  magic_load = dlsym(magic_handle, "magic_load");
+  magic_close = dlsym(magic_handle, "magic_close");
+  magic_file = dlsym(magic_handle, "magic_file");
+  return;
+}
+
+// Unload libmagic
+void image_close_unload_libmagic() {
+  if (magic_handle != NULL) {
+    dlclose(magic_handle);
+  }
+  // TODO Set loaded function pointers to NULL
+  return;
+}
+
+// Initialise magic cookie
+void image_init_magic_cookie() {
     fprintf(stderr, "img init\n");
     cookie = magic_open(MAGIC_MIME_TYPE);
     magic_load(cookie, NULL);
     return;
 }
 
+// Close magic cookie
+void image_close_magic_cookie() {
+  if (cookie != NULL) {
+    magic_close(cookie);
+  }
+  return;
+}
+
+void image_init() {
+  image_init_load_libmagic();
+  image_init_magic_cookie();
+}
+
 void image_close() {
-    if (cookie != NULL) {
-        magic_close(cookie);
-    }
-    return;
+  image_close_magic_cookie();
+  image_close_unload_libmagic();
+  return;
 }
 
 // Types to be traversed
