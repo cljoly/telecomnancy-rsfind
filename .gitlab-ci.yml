@@ -38,3 +38,11 @@ test_dyn_magic:
     - apt-get install -y -qq jq file libmagic-dev
     - make
     - DIFF=1 ./test.sh 7,8
+
+# Without libmagic
+test_dyn_nomagic:
+  stage: test
+  script:
+    - apt-get install -y -qq jq file
+    - make
+    - DIFF=1 ./test.sh 1,2,3
