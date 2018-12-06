@@ -31,8 +31,20 @@
             "b": "find $folder -print"
         },
         {
-            "a": "./rsfind $folder -t $name",
-            "b": "grep -r -l $folder -e $name"
+            "a": "./rsfind $folder -t not_in_files_name",
+            "b": "grep -r -l $folder -e not_in_files_name"
+        },
+        {
+            "a": "./rsfind $folder -t ch",
+            "b": "grep -r -l $folder -e ch"
+        },
+        {
+            "a": "./rsfind $folder -t chat",
+            "b": "grep -r -l $folder -e chat"
+        },
+        {
+            "a": "./rsfind $folder -t dix",
+            "b": "grep -r -l $folder -e dix"
         },
         {
             "a": "./rsfind $folder -i",
