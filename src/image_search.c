@@ -94,7 +94,8 @@ int is_image_mime(const char mime_type[]) {
 
 // A filter, as defined in list_dir.h
 // The magic cookie (see libmagic(3)) must have been initiliased
-filter_result image_filter(context *ctxt, char *path, int is_folder) {
+filter_result image_filter(context *ctxt, char *path, int is_folder, char *extra_argument) {
+    warn_extra_not_null(extra_argument);
     char cpl_path[DNAME_LENGTH];
     complete_path(ctxt, path, cpl_path);
     const char *file_type = magic_file(cookie, cpl_path);

@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     // rsfind behave like find when no arguments are passed.
     char *path = ".";
     // XXX Should be big enough ;-)
-    filter filters[] = {
+    filter_with_extra *wrapped_filters[] = {
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -23,15 +23,15 @@ int main(int argc, char **argv) {
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
     };
-    // Ajout des fonctions de filtre à l’ensemble des filtres
-    void add_to_filters(filter f) {
+    // Ajout des fonctions de filtre à l’ensemble des filtres, avec création du conteneur de l’argument optionnel
+    void add_to_filters(filter f, char *extra_argument) {
       int i = 0;
-      while (filters[i] != NULL) {
+      while (wrapped_filters[i] != NULL) {
         i++;
       }
-      filters[i] = f;
+      wrapped_filters[i] = wrap_filter(f, extra_argument);
     }
-    printer printers[] = {
+    printer_with_extra *wrapped_printers[] = {
                         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -40,13 +40,13 @@ int main(int argc, char **argv) {
                         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
     };
-    // Ajout des fonctions d’affachage à l’ensemble des affichages
-    void add_to_printers(printer f) {
+    // Ajout des fonctions d’affachage à l’ensemble des affichages, avec création du conteneur de l’argument optionnel
+    void add_to_printers(printer f, char *extra_argument) {
         int i = 0;
-        while (printers[i] != NULL) {
+        while (wrapped_printers[i] != NULL) {
             i++;
         }
-        printers[i] = f;
+        wrapped_printers[i] = wrap_printer(f, extra_argument);
     }
 
     ///////values
@@ -97,11 +97,11 @@ int main(int argc, char **argv) {
         case 'i':
             fprintf(stderr, "option -i\n");
             image_init();
-            add_to_filters(image_filter);
+            add_to_filters(image_filter, NULL);
             break;
 
         case 'l':
-            add_to_printers(complete_printer);
+            add_to_printers(complete_printer, NULL);
             break;
 
         case 't':
@@ -123,12 +123,12 @@ int main(int argc, char **argv) {
     }
 
     // Use default printer if nothing else was choosen
-    if (printers[0] == NULL) {
-      printers[0] = basic_printer;
-      printers[1] = NULL;
+    if (wrapped_printers[0] == NULL) {
+      add_to_printers(basic_printer, NULL);
+      wrapped_printers[1] = NULL;
     }
 
-    int ret = walk_from(path, filters, printers);
+    int ret = walk_from(path, wrapped_filters, wrapped_printers);
     image_close();
 
     exit(ret);
