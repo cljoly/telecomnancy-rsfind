@@ -17,28 +17,28 @@ void complete_printer(context *ctxt, char file[], char *extra_argument) {
     // file type https://linux.die.net/man/2/stat
     switch (sb.st_mode & S_IFMT) {
     case S_IFBLK:
-        printf("b ");
+        printf("b");
         break;
     case S_IFCHR:
-        printf("c ");
+        printf("c");
         break;
     case S_IFDIR:
-        printf("d ");
+        printf("d");
         break;
     case S_IFIFO:
-        printf("p ");
+        printf("p");
         break;
     case S_IFLNK:
-        printf("l ");
+        printf("l");
         break;
     case S_IFREG:
-        printf("- ");
+        printf("-");
         break;
     case S_IFSOCK:
-        printf("s ");
+        printf("s");
         break;
     default:
-        printf("- ");
+        printf("-");
         break;
     }
 
@@ -54,24 +54,24 @@ void complete_printer(context *ctxt, char file[], char *extra_argument) {
     (sb.st_mode & S_IXOTH) ? printf("x") : printf("-");
 
     // number of hard links
-    printf(" %lu ", sb.st_nlink);
+    printf(" %lu", sb.st_nlink);
 
     // owner http://linux.die.net/man/3/getpwuid
-    printf("%s ", (getpwuid(sb.st_uid))->pw_name);
+    printf(" %s", (getpwuid(sb.st_uid))->pw_name);
 
     // group http://linux.die.net/man/3/getgrgid
-    printf("\t%s ", (getgrgid(sb.st_gid))->gr_name);
+    printf(" %s", (getgrgid(sb.st_gid))->gr_name);
 
     // size
-    printf("\t%lld ", (long long)sb.st_size);
+    printf(" %lld", (long long)sb.st_size);
 
     // date&time of last modification
     char date[24];
     long int time = sb.st_ctime;
     strftime(date, 16, "%b.  %d %H:%M", localtime(&time));
     date[0] = date[0] + 32;
-    printf("\t%s ", date);
+    printf(" %s", date);
 
     // file name
-    printf("\t%s\n", file);
+    printf(" %s\n", path);
 }
