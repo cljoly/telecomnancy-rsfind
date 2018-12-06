@@ -1,6 +1,6 @@
 #include "textSearch.h"
 
-int textSearch(char* filepath, char toFind[255]) {
+int text_search(char* filepath, char toFind[255]) {
     int textSize = strlen(toFind);
     int textDetect[textSize];
     for (int i=0; i<textSize; i++) {
@@ -45,3 +45,16 @@ int textSearch(char* filepath, char toFind[255]) {
     return b;
 }
 
+filter_result text_filter(context *ctxt, char *path, int is_folder, char *extra_argument) {
+  if (is_folder) {
+      return FILTER_CONTINUE;
+  }
+  char filename[DNAME_LENGTH];
+  complete_path(ctxt, path, filename);
+  int b = text_search(filename, extra_argument);
+  if (b == 0) {
+    return FILTER_IGNORE;
+  } else {
+    return FILTER_KEEP;
+  }
+}

@@ -2,6 +2,7 @@
 #include "list_dir.h"
 #include "printers.h"
 #include "name_search.h"
+#include "textSearch.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,10 +51,14 @@ int main(int argc, char **argv) {
         wrapped_printers[i] = wrap_printer(f, extra_argument);
     }
 
+    // TODO Supporter plusieurs --name & cie (en l’état, le dernier prime,
+    // puisqu’il écrase les valeurs précédentes)
     ///////values
     char name[DNAME_LENGTH];
     // TODO Size of a script, find something better
-    char exec[100];
+    char exec[500];
+    // TODO Size of a search query
+    char search_str[500];
 
     ///////getting opts
     int c;
@@ -105,7 +110,8 @@ int main(int argc, char **argv) {
             break;
 
         case 't':
-          // add_to_filters(…)
+          strcpy(search_str, optarg);
+          add_to_filters(text_filter, search_str);
             break;
 
         case '?':
