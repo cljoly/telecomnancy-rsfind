@@ -44,7 +44,7 @@ clean:
 
 #Full Clean, Objects and Binaries
 cleaner: clean
-	@$(RM) -rf $(TARGETDIR)
+	@$(RM) $(TARGETDIR)/$(TARGET)
 
 #Link
 $(TARGET): $(OBJECTS)
