@@ -1,6 +1,7 @@
 #include "image_search.h"
 #include "list_dir.h"
 #include "printers.h"
+#include "name_search.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,8 +51,9 @@ int main(int argc, char **argv) {
     }
 
     ///////values
-    char name;
-    char exec;
+    char name[DNAME_LENGTH];
+    // TODO Size of a script, find something better
+    char exec[100];
 
     ///////getting opts
     int c;
@@ -59,8 +61,8 @@ int main(int argc, char **argv) {
     while (1) {
         static struct option long_options[] = {
             /* These options set a flag. */
-            {"name", required_argument, 0, 1},
-            {"exec", required_argument, 0, 1},
+            {"name", required_argument, 0, 0},
+            {"exec", required_argument, 0, 0},
             {"listing_long", no_argument, 0, 'l'},
             {"chaine", required_argument, 0, 't'},
             {"is_image", no_argument, 0, 'i'},
@@ -79,18 +81,16 @@ int main(int argc, char **argv) {
             /* If this option set a flag, do nothing else now. */
             // if (long_options[option_index].flag != 0)
             //  break;
-            printf("option %s, index %i", long_options[option_index].name,
+            fprintf(stderr, "option %s, index %i", long_options[option_index].name,
                    option_index);
             if (optarg)
-                printf(" with arg %s", optarg);
-            printf("\n");
+                fprintf(stderr, " with arg %s", optarg);
             if (option_index == 0) {
-                strcpy(&name, optarg);
-                printf("name = %s\n", &name);
+                strcpy(name, optarg);
+                add_to_filters(name_filter, name);
             }
             if (option_index == 1) {
-                strcpy(&exec, optarg);
-                printf("exec = %s\n", &exec);
+                strcpy(exec, optarg);
             }
             break;
 
@@ -105,14 +105,16 @@ int main(int argc, char **argv) {
             break;
 
         case 't':
-            printf("option -t with value '%s'\n", optarg);
+          // add_to_filters(…)
             break;
 
         case '?':
             /* getopt_long already printed an error message. */
+            fprintf(stderr, "getopt: '?' case\n");
             break;
 
         default:
+            fprintf(stderr, "getopt: default case\n");
             abort();
         }
     }
