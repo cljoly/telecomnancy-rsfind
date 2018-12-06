@@ -15,7 +15,7 @@
 typedef enum {
   FILTER_IGNORE=18, // Ignore current element
   FILTER_CONTINUE=38, // Continue to explore with current element, but don’t print it
-  FILTER_KEEP=180   // Keep current element
+  FILTER_KEEP=180   // Keep current element (print and continue to explore if it is a directory)
 } filter_result;
 
 // Context for recursive call of directory walker
