@@ -18,7 +18,7 @@ int text_search(char* filepath, char toFind[255]) {
         c_reconnu = 0;
         for (int i=0; i<textSize; i++) { //Parcours le texte à trouver
             if (c==toFind[i]){
-                printf("%d\n",i);
+                /* printf("%d\n",i); */
                 c_reconnu = 1;
                 if (i == 0){ //Nouveau début possible
                     if (textSize == 1) { b=1;}
