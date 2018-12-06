@@ -12,7 +12,9 @@
 // Group several printers here
 
 // A basic printer, displaying only the path
-void basic_printer(context *ctxt, char file[]);
+// Doesn’t use the extra argument
+void basic_printer(context *ctxt, char file[], char *extra_argument);
 
 // A more complete printer, for -l option
-void complete_printer(context *ctxt, char file[]);
+// Doesn’t use the extra argument
+void complete_printer(context *ctxt, char file[], char *extra_argument);

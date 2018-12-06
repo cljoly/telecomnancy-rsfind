@@ -45,22 +45,49 @@ void free_context(context *ctxt) {
     free(ctxt);
 }
 
+filter_with_extra *wrap_filter(filter f, char *extra_argument) {
+  filter_with_extra  *fwa = (filter_with_extra*)malloc(sizeof(filter_with_extra ));
+  fwa->f = f;
+  fwa->extra = extra_argument;
+  return fwa;
+}
+
+printer_with_extra *wrap_printer(printer f, char *extra_argument) {
+  printer_with_extra  *fwa = (printer_with_extra*)malloc(sizeof(printer_with_extra ));
+  fwa->f = f;
+  fwa->extra = extra_argument;
+  return fwa;
+}
+
+void warn_extra_not_null(char *extra_argument) {
+  if (extra_argument != NULL)
+    fprintf(stderr, "Warning: extra argument not NULL: %s\n", extra_argument);
+}
+
 // Run each printer in a NULL terminated array
-void apply_each_printer(printer printers[], context *ctxt, char *path) {
+void apply_each_printer(printer_with_extra *wrapped_printers[], context *ctxt, char *path) {
   int i = 0;
-  while (printers[i] != NULL) {
-    printers[i](ctxt, path);
+  printer p = NULL;
+  char *extra_argument = NULL;
+  while (wrapped_printers[i] != NULL) {
+    p = wrapped_printers[i]->f;
+    extra_argument = wrapped_printers[i]->extra;
+    p(ctxt, path, extra_argument);
     i++;
   }
 }
 
 // Apply filters to a file, to know whether the file is to be explored
-filter_result apply_each_filter(filter filters[], char file_path[], context *ctxt, int is_folder) {
+filter_result apply_each_filter(filter_with_extra *wrapped_filters[], char file_path[], context *ctxt, int is_folder) {
   filter_result action = FILTER_KEEP;
   int filter_ind = 0;
   filter_result filter_result = FILTER_KEEP;
-  while (action != FILTER_IGNORE && filters[filter_ind] != NULL) {
-    filter_result = filters[filter_ind](ctxt, file_path, is_folder);
+  filter f = NULL;
+  char *extra_argument = NULL;
+  while (action != FILTER_IGNORE && wrapped_filters[filter_ind] != NULL) {
+    f = wrapped_filters[filter_ind]->f;
+    extra_argument = wrapped_filters[filter_ind]->extra;
+    filter_result = f(ctxt, file_path, is_folder, extra_argument);
     if (filter_result < action) {
       // XXX
       action = filter_result;
@@ -75,7 +102,7 @@ filter_result apply_each_filter(filter filters[], char file_path[], context *ctx
 // Context must point to a folder
 // Filter is a NULL terminated array of functions telling whether the file or
 // directory should be ignored.
-int dir_walker(context *ctxt, filter filters[], printer printers[]) {
+int dir_walker(context *ctxt, filter_with_extra *wrapped_filters[], printer_with_extra *wrapped_printers[]) {
     struct dirent *file;
     // Return value
     int ret = 0;
@@ -95,7 +122,7 @@ int dir_walker(context *ctxt, filter filters[], printer printers[]) {
             // Don’t iterate over current directory
             filter_action = FILTER_IGNORE;
         } else {
-          filter_action = apply_each_filter(filters, file->d_name, ctxt, is_folder);
+          filter_action = apply_each_filter(wrapped_filters, file->d_name, ctxt, is_folder);
         }
         // Print current filename or not
         switch (filter_action) {
@@ -104,13 +131,13 @@ int dir_walker(context *ctxt, filter filters[], printer printers[]) {
         case FILTER_CONTINUE:
             break;
         case FILTER_KEEP:
-            apply_each_printer(printers, ctxt, file->d_name);
+            apply_each_printer(wrapped_printers, ctxt, file->d_name);
             break;
         }
         // Iterate over next folder
         if (filter_action != FILTER_IGNORE && is_folder) {
             context *next_ctxt = create_context_from_dirent(ctxt, file);
-            ret = ret || dir_walker(next_ctxt, filters, printers);
+            ret = ret || dir_walker(next_ctxt, wrapped_filters, wrapped_printers);
             free_context(next_ctxt);
         }
         // XXX Ignoring other file types…
@@ -120,7 +147,7 @@ int dir_walker(context *ctxt, filter filters[], printer printers[]) {
 }
 
 // Path: name of the directory to explore from
-int walk_from(char path[], filter filters[], printer printers[]) {
+int walk_from(char path[], filter_with_extra *wrapped_filters[], printer_with_extra *printers[]) {
     // First printing on path, like printf
     // FIXME Don’t use a flag, generalise
     int ret = 0;
@@ -134,12 +161,12 @@ int walk_from(char path[], filter filters[], printer printers[]) {
 
     context *ctxt = create_context(NULL, path);
     // Consider the path is always a folder…
-    filter_result fr = apply_each_filter(filters, path, ctxt, 1);
+    filter_result fr = apply_each_filter(wrapped_filters, path, ctxt, 1);
     if (fr == FILTER_KEEP) {
       apply_each_printer(printers, NULL, path);
     }
     if (fr != FILTER_IGNORE) {
-      ret = dir_walker(ctxt, filters, printers);
+      ret = dir_walker(ctxt, wrapped_filters, printers);
     }
 
     return ret;

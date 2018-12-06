@@ -9,4 +9,4 @@ void image_init();
 // Free magic cookie, works also if image_init was not called
 void image_close();
 
-filter_result image_filter(context *ctxt, char *path, int is_folder);
+filter_result image_filter(context *ctxt, char *path, int is_folder, char *extra_argument);

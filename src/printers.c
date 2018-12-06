@@ -1,12 +1,14 @@
 #include "printers.h"
 
-void basic_printer(context *ctxt, char file[]) {
+void basic_printer(context *ctxt, char file[], char *extra_argument) {
+  warn_extra_not_null(extra_argument);
   char *path = (char *)malloc(DNAME_LENGTH*sizeof(char));
   complete_path(ctxt, file, path);
   printf("%s\n", path);
 }
 
-void complete_printer(context *ctxt, char file[]) {
+void complete_printer(context *ctxt, char file[], char *extra_argument) {
+    warn_extra_not_null(extra_argument);
     char path[256];
     complete_path(ctxt, file, path);
     struct stat sb;

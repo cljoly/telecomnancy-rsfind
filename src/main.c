@@ -1,6 +1,7 @@
 #include "image_search.h"
 #include "list_dir.h"
 #include "printers.h"
+#include "name_search.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +15,7 @@ int main(int argc, char **argv) {
     // rsfind behave like find when no arguments are passed.
     char *path = ".";
     // XXX Should be big enough ;-)
-    filter filters[] = {
+    filter_with_extra *wrapped_filters[] = {
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -23,15 +24,15 @@ int main(int argc, char **argv) {
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
     };
-    // Ajout des fonctions de filtre à l’ensemble des filtres
-    void add_to_filters(filter f) {
+    // Ajout des fonctions de filtre à l’ensemble des filtres, avec création du conteneur de l’argument optionnel
+    void add_to_filters(filter f, char *extra_argument) {
       int i = 0;
-      while (filters[i] != NULL) {
+      while (wrapped_filters[i] != NULL) {
         i++;
       }
-      filters[i] = f;
+      wrapped_filters[i] = wrap_filter(f, extra_argument);
     }
-    printer printers[] = {
+    printer_with_extra *wrapped_printers[] = {
                         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -40,18 +41,19 @@ int main(int argc, char **argv) {
                         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
     };
-    // Ajout des fonctions d’affachage à l’ensemble des affichages
-    void add_to_printers(printer f) {
+    // Ajout des fonctions d’affachage à l’ensemble des affichages, avec création du conteneur de l’argument optionnel
+    void add_to_printers(printer f, char *extra_argument) {
         int i = 0;
-        while (printers[i] != NULL) {
+        while (wrapped_printers[i] != NULL) {
             i++;
         }
-        printers[i] = f;
+        wrapped_printers[i] = wrap_printer(f, extra_argument);
     }
 
     ///////values
-    char name;
-    char exec;
+    char name[DNAME_LENGTH];
+    // TODO Size of a script, find something better
+    char exec[100];
 
     ///////getting opts
     int c;
@@ -59,8 +61,8 @@ int main(int argc, char **argv) {
     while (1) {
         static struct option long_options[] = {
             /* These options set a flag. */
-            {"name", required_argument, 0, 1},
-            {"exec", required_argument, 0, 1},
+            {"name", required_argument, 0, 0},
+            {"exec", required_argument, 0, 0},
             {"listing_long", no_argument, 0, 'l'},
             {"chaine", required_argument, 0, 't'},
             {"is_image", no_argument, 0, 'i'},
@@ -79,40 +81,40 @@ int main(int argc, char **argv) {
             /* If this option set a flag, do nothing else now. */
             // if (long_options[option_index].flag != 0)
             //  break;
-            printf("option %s, index %i", long_options[option_index].name,
+            fprintf(stderr, "option %s, index %i", long_options[option_index].name,
                    option_index);
             if (optarg)
-                printf(" with arg %s", optarg);
-            printf("\n");
+                fprintf(stderr, " with arg %s", optarg);
             if (option_index == 0) {
-                strcpy(&name, optarg);
-                printf("name = %s\n", &name);
+                strcpy(name, optarg);
+                add_to_filters(name_filter, name);
             }
             if (option_index == 1) {
-                strcpy(&exec, optarg);
-                printf("exec = %s\n", &exec);
+                strcpy(exec, optarg);
             }
             break;
 
         case 'i':
             fprintf(stderr, "option -i\n");
             image_init();
-            add_to_filters(image_filter);
+            add_to_filters(image_filter, NULL);
             break;
 
         case 'l':
-            add_to_printers(complete_printer);
+            add_to_printers(complete_printer, NULL);
             break;
 
         case 't':
-            printf("option -t with value '%s'\n", optarg);
+          // add_to_filters(…)
             break;
 
         case '?':
             /* getopt_long already printed an error message. */
+            fprintf(stderr, "getopt: '?' case\n");
             break;
 
         default:
+            fprintf(stderr, "getopt: default case\n");
             abort();
         }
     }
@@ -123,12 +125,12 @@ int main(int argc, char **argv) {
     }
 
     // Use default printer if nothing else was choosen
-    if (printers[0] == NULL) {
-      printers[0] = basic_printer;
-      printers[1] = NULL;
+    if (wrapped_printers[0] == NULL) {
+      add_to_printers(basic_printer, NULL);
+      wrapped_printers[1] = NULL;
     }
 
-    int ret = walk_from(path, filters, printers);
+    int ret = walk_from(path, wrapped_filters, wrapped_printers);
     image_close();
 
     exit(ret);
