@@ -23,6 +23,10 @@
             "b": "find $folder -name a-1"
         },
         {
+            "a": "./rsfind $folder --name i",
+            "b": "find $folder -name i"
+        },
+        {
             "a": "./rsfind $folder --print",
             "b": "find $folder -print"
         },
