@@ -67,10 +67,19 @@ void complete_printer(context *ctxt, char file[], char *extra_argument) {
 
     // date&time of last modification
     char date[24];
-    long int time = sb.st_ctime;
-    strftime(date, 16, "%b.  %d %H:%M", localtime(&time));
-    date[0] = date[0] + 32;
-    printf(" %s", date);
+    time_t now = time (NULL);
+    struct tm tmFile, tmNow;
+    localtime_r(&sb.st_mtime, &tmFile);
+    localtime_r (&now, &tmNow);
+    
+		if (tmFile.tm_year == tmNow.tm_year) {
+            strftime (date, 24, "%b %e %H:%M", &tmFile);
+        }
+    else { 
+            strftime (date, 24, "%b %e  %Y", &tmFile);
+        }
+		printf(" %s", date);
+
 
     // file name
     printf(" %s\n", path);
