@@ -1,11 +1,16 @@
 #include "exec.h"
 
-void exec(char* commandd){
+static int const max_arg_sz = 64;
 
+void exec(char* pathh, char* commandd){
+	
+		char path[255];
+		strcpy(path, pathh);
     char command[255];
     strcpy(command, commandd);
     //puts (command);
-    const int max_arg_sz = 64;
+    //const int max_arg_sz = 64;
+	
 
     //////////////////Partie tri de la commande//////////////
     char cmd_name[max_arg_sz];
@@ -92,14 +97,16 @@ void exec(char* commandd){
     //puts("fin tri cmd");
 
     ///////////Partie execution de la commande///////////
-    char * cmd_args_corrected[8];
-    char * piped_cmd_args_corrected[8];
+    char * cmd_args_corrected[16];
+    //char * piped_cmd_args_corrected[8];
     for (i=0; i<no_arg_cmd; i++){
         cmd_args_corrected[i] = cmd_args[i];
-    } cmd_args_corrected[no_arg_cmd] = NULL;
-    for (i=0; i<arg_pos; i++){
-        piped_cmd_args_corrected[i] = cmd_args[i];
-    } piped_cmd_args_corrected[arg_pos] = NULL;
+    } 
+    cmd_args_corrected[no_arg_cmd] = path;
+    cmd_args_corrected[no_arg_cmd+1] = NULL;
+    //for (i=0; i<arg_pos; i++){
+    //    piped_cmd_args_corrected[i] = cmd_args[i];
+    //} piped_cmd_args_corrected[arg_pos] = NULL;
 
     int fd[2];
     pipe (fd);
@@ -144,3 +151,62 @@ void exec(char* commandd){
         }
     }
 }
+
+void exec_printer (context *ctxt, char file[], char *cmd) {
+	char path[255];
+	complete_path(ctxt, file, path);
+	
+	exec(path, cmd);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
             }
             if (option_index == 1) {
                 strcpy(exec, optarg);
-                //add_to_filters(exec_filter, optarg);
+                add_to_printers(exec_printer, exec);
             }
             break;
 

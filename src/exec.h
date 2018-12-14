@@ -12,7 +12,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-void exec(char* commandd);
+void exec(char* pathh, char* commandd);
+void exec_printer(context *ctxt, char file[], char *cmd);
 
 #endif // EXEC_H_INCLUDED
 
