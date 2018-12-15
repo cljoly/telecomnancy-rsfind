@@ -1,75 +1,89 @@
 {
-    "commands":
-    [
-        {
-            "a": "echo Testing test script",
-            "b": "echo Testing test script"
-        },
-        {
-            "a": "./rsfind",
-            "b": "find"
-        },
-        {
-            "a": "./rsfind $folder",
-            "b": "find $folder"
-        },
-        {
-            "a": "./rsfind ./file_stuct/tmp",
-            "b": "find ./file_stuct/tmp",
-            "return_code": 1
-        },
-        {
-            "a": "./rsfind $folder --name a-1",
-            "b": "find $folder -name a-1"
-        },
-        {
-            "a": "./rsfind $folder --name i",
-            "b": "find $folder -name i"
-        },
-        {
-            "a": "./rsfind $folder --print",
-            "b": "find $folder -print"
-        },
-        {
-            "a": "./rsfind $folder -t not_in_files_name",
-            "b": "grep -r -l $folder -e not_in_files_name"
-        },
-        {
-            "a": "./rsfind $folder -t ch",
-            "b": "grep -r -l $folder -e ch"
-        },
-        {
-            "a": "./rsfind $folder -t chat",
-            "b": "grep -r -l $folder -e chat"
-        },
-        {
-            "a": "./rsfind $folder -t dix",
-            "b": "grep -r -l $folder -e dix"
-        },
-        {
-            "a": "./rsfind $folder -i",
-            "b": "find $folder -type f -exec file {} \\; | grep image | cut -d : -f 1"
-        },
-        {
-            "a": "./rsfind ./file_struct/jpg -i",
-            "b": "find ./file_struct/jpg -type f -exec file {} \\; | grep image | cut -d : -f 1"
-        },
-        {
-            "a": "./rsfind $folder -l",
-            "b": "find $folder -exec ls -l -d {} \\;"
-        },
-        {
-            "a": "./rsfind $folder --exec \"echo {}\"",
-            "b": "find $folder -exec echo {} \\;"
-        },
-        {
-            "a": "./rsfind $folder --exec \"file {}\"",
-            "b": "find $folder -exec file {} \\;"
-        },
-        {
-            "a": "./rsfind −l −t human −i /usr/share/openclipart/svg/",
-            "b": "cat ./test_data_openclipart"
-        }
-    ],
-    "folders": [ "./file_struct", "./file_struct/" ]
+  "commands": [
+    {
+      "a": "echo Testing test script",
+      "b": "echo Testing test script"
+    },
+    {
+      "a": "./rsfind",
+      "b": "find"
+    },
+    {
+      "a": "./rsfind $folder",
+      "b": "find $folder"
+    },
+    {
+      "a": "./rsfind ./file_stuct/tmp",
+      "b": "find ./file_stuct/tmp",
+      "return_code": 1
+    },
+    {
+      "a": "./rsfind $folder --name a-1",
+      "b": "find $folder -name a-1"
+    },
+    {
+      "a": "./rsfind $folder --name i",
+      "b": "find $folder -name i"
+    },
+    {
+      "a": "./rsfind $folder --print",
+      "b": "find $folder -print"
+    },
+    {
+      "a": "./rsfind $folder -t not_in_files_name",
+      "b": "grep -r -l $folder -e not_in_files_name"
+    },
+    {
+      "a": "./rsfind $folder -t ch",
+      "b": "grep -r -l $folder -e ch"
+    },
+    {
+      "a": "./rsfind $folder -t chat",
+      "b": "grep -r -l $folder -e chat"
+    },
+    {
+      "a": "./rsfind $folder -t dix",
+      "b": "grep -r -l $folder -e dix"
+    },
+    {
+      "a": "./rsfind $folder -i",
+      "b": "find $folder -type f -exec file {} \\; | grep image | cut -d : -f 1"
+    },
+    {
+      "a": "./rsfind ./file_struct/jpg -i",
+      "b": "find ./file_struct/jpg -type f -exec file {} \\; | grep image | cut -d : -f 1"
+    },
+    {
+      "a": "./rsfind $folder -l",
+      "b": "find $folder -exec ls -l -d {} \\;"
+    },
+    {
+      "a": "./rsfind $folder --exec \"echo {}\"",
+      "b": "find $folder -exec echo {} \\;"
+    },
+    {
+      "a": "./rsfind $folder --exec \"file {}\"",
+      "b": "find $folder -exec file {} \\;"
+    },
+    {
+      "a": "./rsfind −l −t human −i /usr/share/openclipart/svg/",
+      "b": "cat ./test_data_openclipart"
+    },
+    {
+      "a": "./rsfind $folder -p 4",
+      "b": "./rsfind $folder"
+    },
+    {
+      "a": "./rsfind $folder -p 4 -i",
+      "b": "./rsfind $folder -i"
+    },
+    {
+      "a": "./rsfind $folder -p 4 -t CHAINE",
+      "b": "./rsfind $folder -t CHAINE"
+    }
+  ],
+  "folders": [
+    "./file_struct",
+    "./file_struct/"
+  ]
 }
