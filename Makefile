@@ -15,7 +15,7 @@ OBJEXT      := o
 
 #Flags and Libraries
 CFLAGS      := -Wall -Werror -Wextra -Wformat -g
-LIB         := -ldl
+LIB         := -ldl -lpcre
 
 #---------------------------------------------------------------------------------
 #DO NOT EDIT BELOW THIS LINE

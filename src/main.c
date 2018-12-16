@@ -2,6 +2,7 @@
 #include "list_dir.h"
 #include "printers.h"
 #include "name_search.h"
+#include "pcre_search.h"
 #include "textSearch.h"
 #include <getopt.h>
 #include <stdio.h>
@@ -60,6 +61,7 @@ int main(int argc, char **argv) {
     char exec[500];
     // TODO Size of a search query
     char search_str[500];
+    char search_reg[500];
 
     ///////getting opts
     int c;
@@ -72,12 +74,13 @@ int main(int argc, char **argv) {
             {"ename", required_argument, 0, 0},
             {"listing_long", no_argument, 0, 'l'},
             {"chaine", required_argument, 0, 't'},
+            {"regexp", required_argument, 0, 'T'},
             {"is_image", no_argument, 0, 'i'},
             {0, 0, 0, 0}};
         /* getopt_long stores the option index here. */
         int option_index = 0;
 
-        c = getopt_long(argc, argv, "ilt:", long_options, &option_index);
+        c = getopt_long(argc, argv, "iltT:", long_options, &option_index);
 
         /* Detect the end of the options. */
         if (c == -1)
@@ -119,6 +122,11 @@ int main(int argc, char **argv) {
           strcpy(search_str, optarg);
           add_to_filters(text_filter, search_str);
             break;
+
+        case 'T':
+          strcpy(search_reg, optarg);
+          add_to_filters(pcre_filter, search_reg);
+          break;
 
         case '?':
             /* getopt_long already printed an error message. */
