@@ -47,6 +47,26 @@
             "b": "grep -r -l $folder -e dix"
         },
         {
+            "a": "./rsfind $folder -T not_in_files_name",
+            "b": "grep -r -l $folder -e not_in_files_name"
+        },
+        {
+            "a": "./rsfind $folder -T ch",
+            "b": "grep -r -l $folder -e ch"
+        },
+        {
+            "a": "./rsfind $folder -T '[0-9]{4}\\\\t'",
+            "b": "grep -r -l $folder -e '[0-9]{4}\\\\t'"
+        },
+        {
+            "a": "./rsfind $folder -T chat",
+            "b": "grep -r -l $folder -e chat"
+        },
+        {
+            "a": "./rsfind $folder -T dix",
+            "b": "grep -r -l $folder -e dix"
+        },
+        {
             "a": "./rsfind $folder -i",
             "b": "find $folder -type f -exec file {} \\; | grep image | cut -d : -f 1"
         },
