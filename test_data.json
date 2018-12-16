@@ -69,6 +69,38 @@
         {
             "a": "./rsfind −l −t human −i /usr/share/openclipart/svg/",
             "b": "cat ./test_data_openclipart"
+        },
+        {
+            "a": "./rsfind $folder --ename 'a-*'",
+            "b": "find $folder -name 'a-*'"
+        },
+        {
+            "a": "./rsfind $folder --ename '*a-*'",
+            "b": "find $folder -name '*a-*'"
+        },
+        {
+            "a": "./rsfind $folder --ename 'auie'",
+            "b": "find $folder -name 'auie'"
+        },
+        {
+            "a": "./rsfind $folder --ename 'jpg'",
+            "b": "find $folder -name 'jpg'"
+        },
+        {
+            "a": "./rsfind $folder --ename '*jpg'",
+            "b": "find $folder -name '*jpg'"
+        },
+        {
+            "a": "./rsfind $folder --ename 'jpg*'",
+            "b": "find $folder -name 'jpg*'"
+        },
+        {
+            "a": "./rsfind $folder --ename '*jpg*'",
+            "b": "find $folder -name '*jpg*'"
+        },
+        {
+            "a": "./rsfind $folder --ename i",
+            "b": "find $folder -name i"
         }
     ],
     "folders": [ "./file_struct", "./file_struct/" ]
