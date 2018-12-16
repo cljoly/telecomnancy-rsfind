@@ -59,6 +59,10 @@
             "b": "grep -r -l $folder -e '[0-9]{4}\\\\t'"
         },
         {
+            "a": "./rsfind $folder -T '[0-9]'",
+            "b": "grep -r -l $folder -e '[0-9]'"
+        },
+        {
             "a": "./rsfind $folder -T chat",
             "b": "grep -r -l $folder -e chat"
         },

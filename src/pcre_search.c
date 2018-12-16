@@ -38,10 +38,14 @@ int pcre_search(context *ctxt, char *path, char *pattern) {
     int path_len = strlen(path);
 
     while (fill_buffer_line(&buff_ptr, &buff_size, fd) > 0) {
-      int rc = pcre_exec(re, NULL, path, path_len, 0, 0, ovector, OVECCOUNT);
+      int rc = pcre_exec(re, NULL, path, path_len, 0, PCRE_PARTIAL, ovector, OVECCOUNT);
       if (rc < 0) {
         switch (rc) {
         case PCRE_ERROR_NOMATCH: break;
+        case PCRE_ERROR_PARTIAL:
+          // Consider partial matching as valid
+          fprintf(stderr, "Partial matching\n");
+          return FILTER_KEEP;
         default:
           fprintf(stderr, "Error with PCRE %d\n", rc);
           break;
