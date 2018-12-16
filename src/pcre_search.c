@@ -12,11 +12,10 @@ int fill_buffer_line(char **buff_ptr, int *buff_size, int fd) {
     buff_pos++;
     if (buff_pos >= *buff_size) {
       *buff_size += BUFF_INCREMENT;
-      buff_ptr = realloc(buff_ptr, *buff_size);
+      *buff_ptr = realloc(*buff_ptr, *buff_size);
     }
-    *buff_ptr[buff_pos] = c;
+    (*buff_ptr)[buff_pos] = c;
   }
-  printf("%s\n", *buff_ptr);
   return buff_pos;
 }
 
@@ -25,8 +24,8 @@ int pcre_search(context *ctxt, char *path, char *pattern) {
     complete_path(ctxt, path, filepath);
     int fd = open(filepath, O_RDONLY, 0);
 
-    int buff_size = 0;
-    char **buff_ptr = NULL;
+    int buff_size = BUFF_INCREMENT;
+    char *buff_ptr = (char *)malloc(BUFF_INCREMENT * sizeof(char));
 
     int ovector[OVECCOUNT];
     const char *error;
@@ -38,7 +37,7 @@ int pcre_search(context *ctxt, char *path, char *pattern) {
 
     int path_len = strlen(path);
 
-    while (fill_buffer_line(buff_ptr, &buff_size, fd) > 0) {
+    while (fill_buffer_line(&buff_ptr, &buff_size, fd) > 0) {
       int rc = pcre_exec(re, NULL, path, path_len, 0, 0, ovector, OVECCOUNT);
       if (rc < 0) {
         switch (rc) {
@@ -55,7 +54,7 @@ int pcre_search(context *ctxt, char *path, char *pattern) {
 
     pcre_free(re);
     close(fd);
-    free(*buff_ptr);
+    free(buff_ptr);
     return FILTER_IGNORE;
 }
 
