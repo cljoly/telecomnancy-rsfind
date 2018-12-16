@@ -12,8 +12,12 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-void exec(char* pathh, char* commandd);
+const int max_arg_size = 64;
+const int max_pipe_number = 16;
+
+void exec(char* path, char* command);
 void exec_printer(context *ctxt, char file[], char *cmd);
+void free_args (char* commands[max_pipe_number][max_arg_size], int arg_nb[max_pipe_number], int pipe_nb);
 
 #endif // EXEC_H_INCLUDED
 

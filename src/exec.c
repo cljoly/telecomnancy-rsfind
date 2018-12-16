@@ -1,156 +1,167 @@
 #include "exec.h"
 
-static int const max_arg_sz = 64;
-
-void exec(char* pathh, char* commandd){
-	
-		char path[255];
-		strcpy(path, pathh);
-    char command[255];
-    strcpy(command, commandd);
-    //puts (command);
-    //const int max_arg_sz = 64;
-	
-
-    //////////////////Partie tri de la commande//////////////
-    char cmd_name[max_arg_sz];
-    char cmd_args[16][max_arg_sz];
-    int no_arg_cmd = 0;
-    int piped=0;
-    char piped_cmd_name[max_arg_sz];
-    char piped_cmd_args[16][max_arg_sz];
-
-    char c;
-    int i=0; int arg_pos=0;
-    char buffer[max_arg_sz]; int i_buf=0;
-    int met_piped_cmd=0; int buf_empty;
-    int buflen;
-    while((c=command[i]) != '\0'){
-        //printf("%c\n",c);
-        switch (c){
-            case ' ' :
-                buffer[i_buf] = '\0';
-                //if (!piped || (piped && met_piped_cmd))
-                //    printf ("printing buffer: '%s' with arg_pos: '%d' and piped: '%d'\n", &buffer, arg_pos, piped);
-                if (piped && !met_piped_cmd) {
-                }
-                if (piped && met_piped_cmd) {
-                    strcpy(piped_cmd_args[arg_pos], buffer);
-                    arg_pos++;
-                }
-                if (!piped) {
-                    strcpy(cmd_args[arg_pos], buffer);
-                    arg_pos++;
-                }
-                i_buf = 0;
-                break;
-            case '|' :
-                buffer[i_buf] = '\0';
-                buf_empty = 1;
-                //printf ("printing buffer: '%s'\n", &buffer);
-                buflen = strlen(buffer);
-                for (int i=0; i<buflen; i++){
-                    if (buffer[i] != ' ') buf_empty = 0;
-                }
-                if (!buf_empty) {
-                    //puts("added buffer to first cmd");
-                    strcpy(cmd_args[arg_pos], buffer);
-                    arg_pos++;
-                }
-                no_arg_cmd = arg_pos;
-                arg_pos = 0;
-                i_buf = 0;
-                piped = 1;
-                break;
-            default :
-                if (piped) met_piped_cmd=1;
-                buffer[i_buf] = c;
-                i_buf++;
+void free_args (char* commands[max_pipe_number][max_arg_size], int arg_nb[max_pipe_number], int pipe_nb){
+    int i=0; int j=0;
+    while (i<pipe_nb){
+        while(j<arg_nb[i]){
+            free(commands[i][j]);
+        j++;
         }
-        i++;
-    }
-    //placing last arg if it exists
-    buffer[i_buf] = '\0';
-    buf_empty = 1;
-    //printf ("printing buffer: '%s'\n", &buffer);
-    buflen = strlen(buffer);
-    for (int i=0; i<buflen; i++){
-        if (buffer[i] != ' ') buf_empty = 0;
-    }
-    if (!buf_empty) {
-    //puts("added buffer to first cmd");
-        if (piped) {
-            strcpy(piped_cmd_args[arg_pos], buffer);
-            arg_pos++;
-            //piped_cmd_args[arg_pos+1][0] = NULL;
-        }
-        else {
-            strcpy(cmd_args[arg_pos], buffer);
-            no_arg_cmd = arg_pos+1;
-            //cmd_args[arg_pos+1][0] = NULL;
-        }
-    }
-
-    //getting cmd name for first and snd cmd
-    strcpy(cmd_name, cmd_args[0]);
-    if (piped) strcpy(piped_cmd_name, piped_cmd_args[0]);
-    //puts("fin tri cmd");
-
-    ///////////Partie execution de la commande///////////
-    char * cmd_args_corrected[16];
-    //char * piped_cmd_args_corrected[8];
-    for (i=0; i<no_arg_cmd; i++){
-        cmd_args_corrected[i] = cmd_args[i];
-    } 
-    cmd_args_corrected[no_arg_cmd] = path;
-    cmd_args_corrected[no_arg_cmd+1] = NULL;
-    //for (i=0; i<arg_pos; i++){
-    //    piped_cmd_args_corrected[i] = cmd_args[i];
-    //} piped_cmd_args_corrected[arg_pos] = NULL;
-
-    int fd[2];
-    pipe (fd);
-
-
-    if (piped)
-    {
-    if (fork() > 0) { // père
-        wait(NULL);
-    }
-    else { //fils
-        execlp("sh","sh","-c",command,NULL);
-    }
-    /*
-    if (fork() > 0) { // père
-        puts("0");
-        wait(NULL);
-    }
-    else {// fils
-        if (fork() > 0) { //sous pere
-            dup2(0, fd[1]);
-            wait(NULL);
-            puts("2");puts(piped_cmd_name);
-            execvp(piped_cmd_name, piped_cmd_args_corrected);
-            close(fd[0]); close(fd[1]);
-        }
-        else {//sous fils
-            puts("1");puts(cmd_name);
-            dup2(fd[1], 1);
-            execvp(cmd_name, cmd_args_corrected);
-            close(fd[0]); close(fd[1]);
-        }
-    */
-    }
-    else {
-        if (fork() > 0) { // père
-            //puts("0");
-            wait(NULL);
-        }
-        else {
-            execvp(cmd_name, cmd_args_corrected);
-        }
+    i++;
     }
 }
+
+void exec(char* path, char* command) {
+    char* commands[max_pipe_number][max_arg_size];
+    int pipe_nb = 0;
+    int arg_nb[max_pipe_number];
+    for (int i = 0; i<max_pipe_number; i++) { arg_nb[i]=0;}
+
+    //////////// Parsage de la commande/////////////
+    char c; int c_pos = 0;
+    char buffer[max_arg_size];
+    int buffer_pos = 0;
+    int buffer_empty = 1;
+    int path_check = 0;
+
+    while((c=command[c_pos]) != '\0'){
+        switch (c) {
+            case ' ':
+                buffer[buffer_pos] = '\0';
+                //printf ("printing buffer: '%s' with arg_nb: '%d' and pipe_nb: '%d'\n", &buffer, arg_nb[pipe_nb], pipe_nb);
+                if (!buffer_empty){
+                    commands[pipe_nb][arg_nb[pipe_nb]] = strdup(buffer);
+                    arg_nb[pipe_nb]++;
+                }
+                buffer_pos = 0;
+                buffer_empty = 1;
+                break;
+            case '{':
+                if (buffer_empty)
+                    path_check = 1;
+                break;
+            case '}':
+                if (path_check) {
+                    commands[pipe_nb][arg_nb[pipe_nb]] = strdup(path);
+                    arg_nb[pipe_nb]++;
+                    buffer_pos = 0;
+                    buffer_empty = 1;
+                    path_check = 0;
+                }
+                break;
+            case '|':
+                if (!buffer_empty){
+                    buffer[buffer_pos] = '\0';
+                    commands[pipe_nb][arg_nb[pipe_nb]] = strdup(buffer);
+                    arg_nb[pipe_nb]++;
+                }
+                commands[pipe_nb][arg_nb[pipe_nb]] = NULL;
+                pipe_nb++;
+                buffer_pos = 0;
+                buffer_empty = 1;
+                break;
+            default:
+                buffer[buffer_pos] = c;
+                buffer_empty = 0;
+                buffer_pos++;
+        }
+        c_pos++;
+    }
+    //Inserting last arg if it exists
+    if (!buffer_empty){
+        //printf ("printing buffer: '%s' with arg_nb: '%d' and pipe_nb: '%d'\n", &buffer, arg_nb[pipe_nb], pipe_nb);
+        buffer[buffer_pos] = '\0';
+        commands[pipe_nb][arg_nb[pipe_nb]] = strdup(buffer);
+        arg_nb[pipe_nb]++;
+    }
+    commands[pipe_nb][arg_nb[pipe_nb]] = NULL;
+    arg_nb[pipe_nb]++;
+
+    ////////////////// Execution de la commande //////////////
+
+
+    if (pipe_nb == 0) { // Pas de pipe à gérer
+        if (fork() > 0) { // père
+            wait(NULL);
+        }
+        else { //fils
+            execvp(commands[0][0], commands[0]);
+        }
+    }
+
+    else
+    {
+    int fd[max_pipe_number][2];
+    int dup_result = 0;
+
+    for (int i=0; i<max_pipe_number; i++){
+        if(pipe(fd[i]) == -1) {
+            perror("Pipe failed");
+            exit(1);
+        }
+    }
+
+    //for (int i=0; i<max_pipe_number; i++){
+
+    if(fork() == 0) {           //first fork
+        close(STDOUT_FILENO);  //closing stdout
+        dup_result = dup(fd[0][1]);         //replacing stdout with pipe write
+        close(fd[0][0]);       //closing pipe read
+        close(fd[0][1]);
+
+        execvp(commands[0][0], commands[0]);
+        perror("execvp 1 failed");
+        exit(1);
+    }
+
+    if(fork() == 0) {         //creating 2nd child
+        close(STDIN_FILENO);   //closing stdin
+        dup_result = dup(fd[0][0]);         //replacing stdin with pipe read
+        close(fd[0][1]);       //closing pipe write
+        close(fd[0][0]);
+
+        execvp(commands[1][0], commands[1]);
+        perror("execvp 2 failed");
+        exit(1);
+    }
+
+    if (dup_result < 0) {puts("erreur dup");}
+
+    //}
+
+    for (int i=0; i<pipe_nb; i++){
+        close(fd[i][0]);
+        close(fd[i][1]);
+    }
+    for (int i=0; i<pipe_nb; i++){
+        wait(0);
+    }
+
+    }
+
+//    pipe (fd[0]);
+//    char* readbuffer[255];
+//
+//    for (int i=0; i<1; i++){
+//        if (fork() > 0) { // père
+//            dup2(1, fd[0][0]);
+//            wait(NULL);
+//            close(fd[0][0]);
+//            close(fd[0][1]);
+//            //execvp(commands[i+1][0], commands[i+1]);
+//            //puts(readbuffer);
+//        }
+//        else { //fils
+//            dup2(fd[0][1], 1);
+//            execvp(commands[i][0], commands[i]);
+//            close(fd[0][0]);
+//            close(fd[0][1]);
+//        }
+//    }
+    //execvp(commands[pipe_nb][0], commands[pipe_nb]);
+    free_args(commands, arg_nb, pipe_nb);
+}
+
 
 void exec_printer (context *ctxt, char file[], char *cmd) {
 	char path[255];
