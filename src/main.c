@@ -55,6 +55,7 @@ int main(int argc, char **argv) {
     // puisqu’il écrase les valeurs précédentes)
     ///////values
     char name[DNAME_LENGTH];
+    char ename[DNAME_LENGTH];
     // TODO Size of a script, find something better
     char exec[500];
     // TODO Size of a search query
@@ -68,6 +69,7 @@ int main(int argc, char **argv) {
             /* These options set a flag. */
             {"name", required_argument, 0, 0},
             {"exec", required_argument, 0, 0},
+            {"ename", required_argument, 0, 0},
             {"listing_long", no_argument, 0, 'l'},
             {"chaine", required_argument, 0, 't'},
             {"is_image", no_argument, 0, 'i'},
@@ -89,13 +91,17 @@ int main(int argc, char **argv) {
             fprintf(stderr, "option %s, index %i", long_options[option_index].name,
                    option_index);
             if (optarg)
-                fprintf(stderr, " with arg %s", optarg);
+                fprintf(stderr, " with arg %s\n", optarg);
             if (option_index == 0) {
                 strcpy(name, optarg);
                 add_to_filters(name_filter, name);
             }
             if (option_index == 1) {
                 strcpy(exec, optarg);
+            }
+            if (option_index == 2) {
+              strcpy(ename, optarg);
+              add_to_filters(ename_filter, ename);
             }
             break;
 
