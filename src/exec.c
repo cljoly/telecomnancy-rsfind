@@ -1,6 +1,6 @@
 #include "exec.h"
 
-void free_args (char* commands[max_pipe_number][max_arg_size], int arg_nb[max_pipe_number], int pipe_nb){
+void free_args (char* commands[MAX_PIPE_NB][MAX_ARG_SZ], int arg_nb[MAX_PIPE_NB], int pipe_nb){
     int i=0; int j=0;
     while (i<pipe_nb){
         while(j<arg_nb[i]){
@@ -12,14 +12,14 @@ void free_args (char* commands[max_pipe_number][max_arg_size], int arg_nb[max_pi
 }
 
 void exec(char* path, char* command) {
-    char* commands[max_pipe_number][max_arg_size];
+    char* commands[MAX_PIPE_NB][MAX_ARG_SZ];
     int pipe_nb = 0;
-    int arg_nb[max_pipe_number];
-    for (int i = 0; i<max_pipe_number; i++) { arg_nb[i]=0;}
+    int arg_nb[MAX_PIPE_NB];
+    for (int i = 0; i<MAX_PIPE_NB; i++) { arg_nb[i]=0;}
 
     //////////// Parsage de la commande/////////////
     char c; int c_pos = 0;
-    char buffer[max_arg_size];
+    char buffer[MAX_ARG_SZ];
     int buffer_pos = 0;
     int buffer_empty = 1;
     int path_check = 0;
@@ -91,17 +91,17 @@ void exec(char* path, char* command) {
 
     else
     {
-    int fd[max_pipe_number][2];
+    int fd[MAX_PIPE_NB][2];
     int dup_result = 0;
 
-    for (int i=0; i<max_pipe_number; i++){
+    for (int i=0; i<MAX_PIPE_NB; i++){
         if(pipe(fd[i]) == -1) {
             perror("Pipe failed");
             exit(1);
         }
     }
 
-    //for (int i=0; i<max_pipe_number; i++){
+    //for (int i=0; i<MAX_PIPE_NB; i++){
 
     if(fork() == 0) {           //first fork
         close(STDOUT_FILENO);  //closing stdout
