@@ -63,8 +63,6 @@ int main(int argc, char **argv) {
     // TODO Size of a search query
     char search_str[500];
     char search_reg[500];
-    // Number of thread
-    int nb_thread;
 
     ///////getting opts
     int c;
@@ -83,8 +81,7 @@ int main(int argc, char **argv) {
         /* getopt_long stores the option index here. */
         int option_index = 0;
 
-        c = getopt_long(argc, argv, "iltpT:", long_options, &option_index);
-        c = getopt_long(argc, argv, "iltp:", long_options, &option_index);
+        c = getopt_long(argc, argv, "iltT:", long_options, &option_index);
 
         /* Detect the end of the options. */
         if (c == -1)
@@ -134,7 +131,7 @@ int main(int argc, char **argv) {
           break;
 
         case 'p':
-          nb_thread = atoi(optarg);
+          fprintf(stderr, "thread");
           break;
 
         case '?':
@@ -159,8 +156,7 @@ int main(int argc, char **argv) {
       wrapped_printers[1] = NULL;
     }
 
-    int ret = walk_from(path, wrapped_filters, wrapped_printers, nb_thread);
-
+    int ret = walk_from(path, wrapped_filters, wrapped_printers);
     image_close();
 
     exit(ret);

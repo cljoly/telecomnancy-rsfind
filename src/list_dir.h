@@ -7,8 +7,6 @@
 #ifndef LIST_DIR_H
 #define LIST_DIR_H
 
-#include "thread.h"
-
 // Length for a file name in various part of dirent
 #define DNAME_LENGTH 256
 
@@ -61,7 +59,7 @@ void warn_extra_not_null(char *extra_argument);
 // Filter and printer are the function to be used to filter files and to print
 // results
 // Return 1 if there is an error while traversing files, 0 otherwise
-int walk_from(char path[], filter_with_extra *wrapped_filters[], printer_with_extra *printer[], int nb_thread);
+int walk_from(char path[], filter_with_extra *wrapped_filters[], printer_with_extra *printer[]);
 
 // Concat path from a context with a filename, in order to create a complete
 // path. Stores the result in result.
