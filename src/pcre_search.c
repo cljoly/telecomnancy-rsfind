@@ -31,7 +31,7 @@ int pcre_search(context *ctxt, char *path, char *pattern) {
     const char *error;
     int erroroffset = 0;
     // TODO Compile regexp only once
-    pcre *re = pcre_compile(pattern, 0, &error, &erroroffset, NULL);
+    pcre *re = pcre_compile(pattern, PCRE_PARTIAL, &error, &erroroffset, NULL);
     if (re == NULL)
       fprintf(stderr, "PCRE failed %d: %s\n", erroroffset, error);
 
