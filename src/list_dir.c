@@ -1,4 +1,9 @@
 #include "list_dir.h"
+#include "thread.h"
+int *run_n_thread(int nb_thread);
+void wait_threads(int *ids, int nb_thread);
+
+
 
 // Dirent: directory entry, file or directory
 
@@ -147,9 +152,10 @@ int dir_walker(context *ctxt, filter_with_extra *wrapped_filters[], printer_with
 }
 
 // Path: name of the directory to explore from
-int walk_from(char path[], filter_with_extra *wrapped_filters[], printer_with_extra *printers[]) {
+
+int walk_from(char path[], filter_with_extra *wrapped_filters[], printer_with_extra *printers[], int nb_thread) {
+    int *ids = run_n_thread(nb_thread);
     // First printing on path, like printf
-    // FIXME Don’t use a flag, generalise
     int ret = 0;
     DIR *dir = opendir(path);
     closedir(dir);
@@ -168,6 +174,8 @@ int walk_from(char path[], filter_with_extra *wrapped_filters[], printer_with_ex
     if (fr != FILTER_IGNORE) {
       ret = dir_walker(ctxt, wrapped_filters, printers);
     }
+
+    wait_threads(ids, nb_thread);
 
     return ret;
 }

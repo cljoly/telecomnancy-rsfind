@@ -1,4 +1,5 @@
 #include "textSearch.h"
+#include "list_dir.h"
 
 int text_search(char* filepath, char toFind[255]) {
     int textSize = strlen(toFind);
