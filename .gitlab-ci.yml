@@ -37,7 +37,7 @@ test_dyn_magic:
   script:
     - apt-get install -y -qq jq file libmagic-dev
     - make
-    - DIFF=1 ./test.sh 7,8
+    - DIFF=1 ./test.sh $(./list_test.sh | grep -- -i | cut -d , -f 1 | tr '\n' ',' | sed 's/,$//')
 
 # Without libmagic
 test_dyn_nomagic:
