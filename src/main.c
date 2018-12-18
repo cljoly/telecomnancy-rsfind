@@ -108,6 +108,14 @@ int main(int argc, char **argv) {
               strcpy(ename, optarg);
               add_to_filters(ename_filter, ename);
             }
+            if (option_index == 4) {
+              strcpy(search_str, optarg);
+              add_to_filters(text_filter, search_str);
+            }
+            if (option_index == 5) {
+              strcpy(search_reg, optarg);
+              add_to_filters(pcre_filter, search_reg);
+            }
             break;
 
         case 'i':
@@ -121,12 +129,12 @@ int main(int argc, char **argv) {
             break;
 
         case 't':
-          strcpy(search_str, optarg);
+          /* strcpy(search_str, optarg); */
           add_to_filters(text_filter, search_str);
             break;
 
         case 'T':
-          strcpy(search_reg, optarg);
+          /* strcpy(search_reg, optarg); */
           add_to_filters(pcre_filter, search_reg);
           break;
 
