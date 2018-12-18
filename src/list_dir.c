@@ -149,7 +149,6 @@ int dir_walker(context *ctxt, filter_with_extra *wrapped_filters[], printer_with
 // Path: name of the directory to explore from
 int walk_from(char path[], filter_with_extra *wrapped_filters[], printer_with_extra *printers[]) {
     // First printing on path, like printf
-    // FIXME Don’t use a flag, generalise
     int ret = 0;
     DIR *dir = opendir(path);
     closedir(dir);
