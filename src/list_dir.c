@@ -1,5 +1,5 @@
 #include "list_dir.h"
-#include "thread.h"
+/* #include "thread.h" */
 int *run_n_thread(int nb_thread);
 void wait_threads(int *ids, int nb_thread);
 
@@ -154,7 +154,8 @@ int dir_walker(context *ctxt, filter_with_extra *wrapped_filters[], printer_with
 // Path: name of the directory to explore from
 
 int walk_from(char path[], filter_with_extra *wrapped_filters[], printer_with_extra *printers[], int nb_thread) {
-    int *ids = run_n_thread(nb_thread);
+    /* int *ids = run_n_thread(nb_thread); */
+    fprintf(stderr, "nb_thread %i non utilisé", nb_thread);
     // First printing on path, like printf
     int ret = 0;
     DIR *dir = opendir(path);
@@ -175,7 +176,7 @@ int walk_from(char path[], filter_with_extra *wrapped_filters[], printer_with_ex
       ret = dir_walker(ctxt, wrapped_filters, printers);
     }
 
-    wait_threads(ids, nb_thread);
+    /* wait_threads(ids, nb_thread); */
 
     return ret;
 }
