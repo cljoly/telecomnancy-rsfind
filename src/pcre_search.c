@@ -31,14 +31,14 @@ int pcre_search(context *ctxt, char *path, char *pattern) {
     const char *error;
     int erroroffset = 0;
     // TODO Compile regexp only once
-    pcre *re = pcre_compile(pattern, PCRE_PARTIAL, &error, &erroroffset, NULL);
+    pcre *re = pcre_compile(pattern, 0, &error, &erroroffset, NULL);
     if (re == NULL)
       fprintf(stderr, "PCRE failed %d: %s\n", erroroffset, error);
 
     int path_len = strlen(path);
 
     while (fill_buffer_line(&buff_ptr, &buff_size, fd) > 0) {
-      int rc = pcre_exec(re, NULL, path, path_len, 0, PCRE_PARTIAL, ovector, OVECCOUNT);
+      int rc = pcre_exec(re, NULL, path, path_len, 0, 0, ovector, OVECCOUNT);
       if (rc < 0) {
         switch (rc) {
         case PCRE_ERROR_NOMATCH: break;
