@@ -101,27 +101,54 @@ void exec(char* path, char* command) {
         }
     }
 
-    //for (int i=0; i<MAX_PIPE_NB; i++){
-
-    if(fork() == 0) {           //first fork
+    if(fork() == 0) {           //child
         close(STDOUT_FILENO);  //closing stdout
         dup_result = dup(fd[0][1]);         //replacing stdout with pipe write
-        close(fd[0][0]);       //closing pipe read
-        close(fd[0][1]);
+
+        for (int i=0; i<pipe_nb; i++){
+        close(fd[i][0]);
+        close(fd[i][1]);
+        }
 
         execvp(commands[0][0], commands[0]);
         perror("execvp 1 failed");
         exit(1);
     }
 
-    if(fork() == 0) {         //creating 2nd child
-        close(STDIN_FILENO);   //closing stdin
-        dup_result = dup(fd[0][0]);         //replacing stdin with pipe read
-        close(fd[0][1]);       //closing pipe write
-        close(fd[0][0]);
+    int i;
 
-        execvp(commands[1][0], commands[1]);
-        perror("execvp 2 failed");
+    for (i=0; i<pipe_nb-1; i++)
+    {
+
+    if(fork() == 0) {           //child
+        close(STDIN_FILENO);    //closing stdin
+        close(STDOUT_FILENO);  //closing stdout
+        dup_result = dup2(fd[i+1][1], STDOUT_FILENO);         //replacing stdout with pipe write
+        dup_result = dup2(fd[i][0], STDIN_FILENO);         //replacing stdin with pipe read
+
+        for (int i=0; i<pipe_nb; i++){
+        close(fd[i][0]);
+        close(fd[i][1]);
+        }
+
+        execvp(commands[i+1][0], commands[i+1]);
+        perror("execvp i failed");
+        exit(1);
+    }
+
+    }
+
+    if(fork() == 0) {         //creating last child
+        close(STDIN_FILENO);   //closing stdin
+        dup_result = dup(fd[i][0]);         //replacing stdin with pipe read
+
+        for (int i=0; i<pipe_nb; i++){
+        close(fd[i][0]);
+        close(fd[i][1]);
+        }
+
+        execvp(commands[i+1][0], commands[i+1]);
+        perror("execvp last failed");
         exit(1);
     }
 
