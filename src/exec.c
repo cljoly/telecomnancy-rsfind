@@ -160,7 +160,7 @@ void exec(char* path, char* command) {
         close(fd[i][0]);
         close(fd[i][1]);
     }
-    for (int i=0; i<pipe_nb; i++){
+    for (int i=0; i<pipe_nb+1; i++){
         wait(0);
     }
 
