@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
         /* getopt_long stores the option index here. */
         int option_index = 0;
 
-        c = getopt_long(argc, argv, "iltT:", long_options, &option_index);
+        c = getopt_long(argc, argv, "ilt:T:", long_options, &option_index);
 
         /* Detect the end of the options. */
         if (c == -1)
@@ -112,10 +112,6 @@ int main(int argc, char **argv) {
               strcpy(search_str, optarg);
               add_to_filters(text_filter, search_str);
             }
-            if (option_index == 5) {
-              strcpy(search_reg, optarg);
-              add_to_filters(pcre_filter, search_reg);
-            }
             break;
 
         case 'i':
@@ -129,12 +125,12 @@ int main(int argc, char **argv) {
             break;
 
         case 't':
-          /* strcpy(search_str, optarg); */
+          strcpy(search_str, optarg);
           add_to_filters(text_filter, search_str);
             break;
 
         case 'T':
-          /* strcpy(search_reg, optarg); */
+          strcpy(search_reg, optarg);
           add_to_filters(pcre_filter, search_reg);
           break;
 
