@@ -42,6 +42,15 @@ TODO
 Cette étape faisait partie des plus complexes des attendus obligatoires du sujet. Elle a demandé une grande part de temps pour son implémentation et les recherches qui lui sont liées. Cette fonctionnalitée s'exécute en deux étapes: 
 	- La première le parsage de la commande pour récupérer les arguments, insérer le chemin courant à la place des '{}', gérer les pipes
 	- la seconde l'execution de la boucle 'for' qui lance autant de 'fork()' que de sous programmes, dont les entrées/sorties sont interconnectées, nécéssaires à la gestion des pipes.
+	 
+	
+
+# Options
+
+## Thread
+
+L’argument -p est interprété. Cependant, nous n’avons pas pu implémenter cette
+partie par manque de temps.
 
 ## Nombre d'heures passée sur les différentes étapes du sujet
 
