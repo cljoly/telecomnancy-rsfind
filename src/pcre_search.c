@@ -11,6 +11,7 @@ int fill_buffer_line(char *buff, int *buff_size, int fd) {
   while(read(fd, &c, 1) > 0) {
     if (buff_pos >= *buff_size) {
       *buff_size += BUFF_INCREMENT;
+      fprintf(stderr, "realloc %i\n", *buff_size);
       buff = realloc(buff, *buff_size);
     }
     if (strncmp(&c,"\n", 1) == 0) {
@@ -52,16 +53,17 @@ int pcre_search(context *ctxt, char *path, char *pattern) {
           fprintf(stderr, "Partial matching\n");
           return FILTER_KEEP;
         default:
-          fprintf(stderr, "Error with PCRE %d\n", rc);
+          fprintf(stderr, "Error with PCRE %d (path %s; ctxt->dir_name %s)\n", rc, path, ctxt->dir_name);
           break;
         }
       } else {
         // Matched
-        fprintf(stderr, "Matching\n");
+        fprintf(stderr, "Matching %s\n", buff);
         return FILTER_KEEP;
       }
     }
 
+    fprintf(stderr, "Closing for %s\n", path);
     pcre_free(re);
     close(fd);
     free(buff);

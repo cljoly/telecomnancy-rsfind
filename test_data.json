@@ -140,6 +140,7 @@
   ],
   "folders": [
     "./file_struct",
-    "./file_struct/"
+    "./file_struct/",
+    "./file_struct/d"
   ]
 }
