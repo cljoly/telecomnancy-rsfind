@@ -12,8 +12,8 @@ L'objectif de ce projet était de réécrire nous-même une commande similaire �
 Notre code source se situe essentiellement dans le dossier "src" à la racine du dépôt. À l'intérieur nous avons toutes nos fonctions organisées de la façon suivante:
 
 - Dans le fichier "main.c" se trouve la fonction main() de notre programme, ainsi que la gestion des options de la ligne de commande et la sélection des paramètres de lancement.
-- Le fichier "list_dir.c" inclue la descente récursive de l'arborescence des dossiers, ainsi que l'appel à nos fonctions de filtrage et d'affichage.
-- Chaque autre fichier source inclu l'implémentation d'une différente fonctionnalité du sujet, en tant que filtre ou affichage, et vient se greffer dans le reste du code par son appel dans les fichiers mentionnés plus haut.
+- Le fichier "list_dir.c" inclut la descente récursive de l'arborescence des dossiers, ainsi que l'appel à nos fonctions de filtrage et d'affichage.
+- Chaque autre fichier source inclut l'implémentation d'une différente fonctionnalité du sujet, en tant que filtre ou affichage, et vient se greffer dans le reste du code par son appel dans les fichiers mentionnés plus haut.
 	
 
 # Choix de conception et difficultés rencontrées
@@ -21,11 +21,11 @@ Nous expliquons ici les principaux choix et difficultés qui concerne la partie 
 
 ## Tests
 
-Les différentes étapes et fonctionnalités ont été testées localement par le script test.sh. Il exécute et compare un appel de notre fonction rsFind à un appel à find pour différents arguments. Les commandes des tests sont stockées dans un format .json pratique à la racine du dépot et les tests sont lancés en appelant le script "test.sh" dans un terminal. La création et le maintient de ces test aidaient à complémenter les tests blancs fournis et étaient essentiels au dévellopement du programme. 
+Les différentes étapes et fonctionnalités ont été testées localement par le script test.sh. Il exécute et compare un appel de notre fonction rsFind à un appel à find pour différents arguments. Les commandes des tests sont stockées dans un format .json pratique à la racine du dépot et les tests sont lancés en appelant le script "test.sh" dans un terminal. La création et le maintient de ces tests aidaient à complémenter les tests blancs fournis et étaient essentiels au développement du programme. 
 
 ## Étape 1: analyse des option de la ligne de commande
 
-Comme conseillé dans le sujet nous utilisons la fonction "getopt_long". Pour ce faire est utilisée une boucle sur les options de la ligne de commande, accompagnés de tests et d'une récupération d'argument lorsque leurs présence est requise. La difficultée de cette étape était principalement la familiarisation à l'appel d'une fonction qui ne nous était pas familière auparavant. 
+Comme conseillé dans le sujet nous utilisons la fonction "getopt_long". Pour ce faire est utilisée une boucle sur les options de la ligne de commande, accompagnés de tests et d'une récupération d'argument lorsque leurs présences est requise. La difficulté de cette étape était principalement la familiarisation à l'appel d'une fonction qui ne nous était pas familière auparavant. 
 
 ## Étape 2-3: listing du contenu d'un répertoire et des sous-répertoires
 La récupération du contenu d'un répertoire et le parcours de l'arborescence se fait par descente récursive, laquelle est écrite dans le fichier "list_dir.c" cette étape permet de construire un outil, que nous appellons le contexte, qui sert à donner le chemin d'execution pour le reste des fonctionnalités (printers, filters) du programme. Cette étape a demandé une gestion pointilleuse de la mémoire et des appels récursif et avait pour principale difficultée la récupération du chemin correct vers les fichiers.
@@ -38,7 +38,7 @@ Cette fonctionnalité est implémentée dans le fichier "textSearch.c". Nous uti
 
 ## Étape 6: recherche d'image
 
-Nous détectons le type d’image avec la bibliothèque `libmagic`.
+Nous détectons le type d’image avec la bibliothèque `libmagic`. On regarde si le type mime commence par `image/`.
 
 ## Étape 7: exécution de sous-commandes
 Cette étape faisait partie des plus complexes des attendus obligatoires du sujet. Elle a demandé une grande part de temps pour son implémentation et les recherches qui lui sont liées. Cette fonctionnalitée s'exécute en deux étapes: 
