@@ -5,14 +5,14 @@
 
 # Introduction
 
-L'objectif de ce projet était de réécrire nous-même une commande similaire à "find" par implémentation des éléments vu en cours. Les attendus du sujet et la nature du rendu nous ont poussé à aller plus loin dans l'écriture des fonctions de test de notre programme. Nous avons su implémenter la totalité de la partie obligatoire du sujet, et une majorité de la partie "bonus". Ce document détaille notre programme et les choix d'implémentation que nous avons fait.
+L'objectif de ce projet était de réécrire nous-même une commande similaire à `find` par implémentation des éléments vu en cours. Les attendus du sujet et la nature du rendu nous ont poussé à aller plus loin dans l'écriture des fonctions de test de notre programme. Nous avons su implémenter la totalité de la partie obligatoire du sujet, et une majorité de la partie "bonus". Ce document détaille notre programme et les choix d'implémentation que nous avons fait.
 
 
 # Structure globale
 Notre code source se situe essentiellement dans le dossier "src" à la racine du dépôt. À l'intérieur nous avons toutes nos fonctions organisées de la façon suivante:
 
-- Dans le fichier "main.c" se trouve la fonction main() de notre programme, ainsi que la gestion des options de la ligne de commande et la sélection des paramètres de lancement.
-- Le fichier "list_dir.c" inclut la descente récursive de l'arborescence des dossiers, ainsi que l'appel à nos fonctions de filtrage et d'affichage.
+- Dans le fichier "main.c" se trouve la fonction `main()` de notre programme, ainsi que la gestion des options de la ligne de commande et la sélection des paramètres de lancement.
+- Le fichier `list_dir.c` inclut la descente récursive de l'arborescence des dossiers, ainsi que l'appel à nos fonctions de filtrage et d'affichage.
 - Chaque autre fichier source inclut l'implémentation d'une différente fonctionnalité du sujet, en tant que filtre ou affichage, et vient se greffer dans le reste du code par son appel dans les fichiers mentionnés plus haut.
 	
 
