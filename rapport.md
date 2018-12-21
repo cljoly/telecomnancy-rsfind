@@ -1,5 +1,6 @@
 # Projet de RS 2018: RSfind
 Auteurs: Joly Clément, Fenouillet Lucas
+
 Date de rendu: 21/12/2018
 
 
@@ -18,16 +19,13 @@ Notre code source se situe essentiellement dans le dossier "src" à la racine du
 Nous expliquons ici les principaux choix et difficultés qui concerne la partie détaillée par étapes (partie obligatoire).
 
 ### Tests
-TODO
+Les différentes étapes et fonctionnalitées ont été testée localement par le script test.sh. il exécute et compare un appel de notre fonction rsFind à un appel à find pour différents arguments. Les commandes des tests sont stockés dans un format .json pratique à la racine du dépot et les tests sont lancés en appelant le script "test.sh" dans un terminal. La création et le maintient de ces test aidaient à complémenter les tests blancs fournis et étaient essentiels au dévellopement du programme. 
 
 ### Étape 1: analyse des option de la ligne de commande
 Comme conseillé dans le sujet nous utilisons la fonction "getopt_long". Pour ce faire est utilisée une boucle sur les options de la ligne de commande, accompagnés de tests et d'une récupération d'argument lorsque leurs présence est requise. La difficultée de cette étape était principalement la familiarisation à l'appel d'une fonction qui ne nous était pas familière auparavant. 
 
-### Étape 2: listing du contenu d'un répertoire
-TODO
-
-### Étape 3: listing des sous-répertoires
-TODO
+### Étape 2-3: listing du contenu d'un répertoire et des sous-répertoires
+La récupération du contenu d'un répertoire et le parcours de l'arborescence se fait par descente récursive, laquelle est écrite dans le fichier "list_dir.c" cette étape permet de construire un outil, que nous appellons le contexte, qui sert à donner le chemin d'execution pour le reste des fonctionnalités (printers, filters) du programme. Cette étape a demandé une gestion pointilleuse de la mémoire et des appels récursif et avait pour principale difficultée la récupération du chemin correct vers les fichiers.
 
 ### Étape 4: listing détaillé
 Cette fonctionnalité est implémentée dans le fichier "printers.c". La fonction qui l'implémente récupère le contexte de la recherche à l'aide des étapes 2 et 3. La difficultées majeure rencontrée à cette étape était d'avoir une sortie qui soit identique caractère-par-caractère à la sortie du "ls -l". Non seulement le parseur et la récupération des informations devaient être pointilleux, mais un des champs de l'affichage détaillé (la date) dépendait de la langue utilisée par le système. Nous avons fait le choix de l'implémenter pour la version anglaise.
@@ -59,13 +57,14 @@ Clément: TODO
 	- Implémentation
 	- Tests
 	- Rédaction du rapport
+	-Total:
 	
 Lucas:
 	- Conception						10
 	- Implémentation				40
 	- Tests									3
 	- Rédaction du rapport	4
-	
+	-Total: 57h
 
 
 
