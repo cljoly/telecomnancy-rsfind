@@ -34,7 +34,7 @@ La récupération du contenu d'un répertoire et le parcours de l'arborescence s
 Cette fonctionnalité est implémentée dans le fichier "printers.c". La fonction qui l'implémente récupère le contexte de la recherche à l'aide des étapes 2 et 3. La difficultées majeure rencontrée à cette étape était d'avoir une sortie qui soit identique caractère-par-caractère à la sortie du "ls -l". Non seulement le parseur et la récupération des informations devaient être pointilleux, mais un des champs de l'affichage détaillé (la date) dépendait de la langue utilisée par le système. Nous avons fait le choix de l'implémenter pour la version anglaise.
 
 ## Étape 5: recherche de texte
-Cette fonctionnalité est implémentée dans le fichier "textSearch.c". Nous utilisons un parseur qui parcours le fichier, ainsi qu'un système d'indices (annotés pointeurs dans le code) parcourants le mot à trouver dans le texte. Ces indices indiquent quelle part du mot à chercher dans le texte a été détectée à chaque instant, en gérant les éventuels sous-mots liés à une répétition de pattern.
+Cette fonctionnalité est implémentée dans le fichier `textSearch.c`. Nous utilisons un parseur qui parcours le fichier, ainsi qu'un système d'indices (annotés pointeurs dans le code) parcourants le mot à trouver dans le texte. Ces indices indiquent quelle part du mot à chercher dans le texte a été détectée à chaque instant, en gérant les éventuels sous-mots liés à une répétition de pattern.
 
 ## Étape 6: recherche d'image
 
@@ -42,8 +42,8 @@ Nous détectons le type d’image avec la bibliothèque `libmagic`. On regarde s
 
 ## Étape 7: exécution de sous-commandes
 Cette étape faisait partie des plus complexes des attendus obligatoires du sujet. Elle a demandé une grande part de temps pour son implémentation et les recherches qui lui sont liées. Cette fonctionnalitée s'exécute en deux étapes: 
-	- La première le parsage de la commande pour récupérer les arguments, insérer le chemin courant à la place des '{}', gérer les pipes
-	- la seconde l'execution de la boucle 'for' qui lance autant de 'fork()' que de sous programmes, dont les entrées/sorties sont interconnectées, nécéssaires à la gestion des pipes.
+- La première le parsage de la commande pour récupérer les arguments, insérer le chemin courant à la place des `{}`, gérer les pipes
+- la seconde l'execution de la boucle `for` qui lance autant de `fork()` que de sous programmes, dont les entrées/sorties sont interconnectées, nécéssaires à la gestion des pipes.
 	 
 	
 
@@ -51,7 +51,7 @@ Cette étape faisait partie des plus complexes des attendus obligatoires du suje
 
 ## Thread
 
-L’argument -p est interprété. Cependant, nous n’avons pas pu implémenter cette
+L’argument `-p` est interprété. Cependant, nous n’avons pas pu implémenter cette
 partie par manque de temps.
 
 ## Chargement dynamique
