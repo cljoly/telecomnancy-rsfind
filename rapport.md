@@ -34,7 +34,8 @@ Cette fonctionnalité est implémentée dans le fichier "printers.c". La fonctio
 Cette fonctionnalité est implémentée dans le fichier "textSearch.c". Nous utilisons un parseur qui parcours le fichier, ainsi qu'un système d'indices (annotés pointeurs dans le code) parcourants le mot à trouver dans le texte. Ces indices indiquent quelle part du mot à chercher dans le texte a été détectée à chaque instant, en gérant les éventuels sous-mots liés à une répétition de pattern.
 
 ### Étape 6: recherche d'image
-TODO
+
+Nous détectons le type d’image avec la bibliothèque `libmagic`.
 
 ### Étape 7: exécution de sous-commandes
 Cette étape faisait partie des plus complexes des attendus obligatoires du sujet. Elle a demandé une grande part de temps pour son implémentation et les recherches qui lui sont liées. Cette fonctionnalitée s'exécute en deux étapes: 
@@ -50,14 +51,26 @@ Cette étape faisait partie des plus complexes des attendus obligatoires du suje
 L’argument -p est interprété. Cependant, nous n’avons pas pu implémenter cette
 partie par manque de temps.
 
-## Nombre d'heures passée sur les différentes étapes du sujet
+## Chargement dynamique
 
-Clément: TODO
-	- Conception
-	- Implémentation
-	- Tests
-	- Rédaction du rapport
-	-Total:
+Nous avons implémenté le chargement dynamique de `libmagic` avec `libdl`. Ceci a été testé avec l’intégration continue de Gitlab, en lançant le programme dans un environnement où la bibliothèque n’était pas installée.
+
+## -T & libpcre
+
+L’option -T a été imlémentée.
+
+## Méta-caractères shell
+
+L’option `--ename` de recherche avec les méta-caractères shell a également été codée.
+
+# Nombre d'heures passée sur les différentes étapes du sujet
+
+Clément: 
+	- Conception 12h
+	- Implémentation 41h
+	- Tests 13h
+	- Rédaction du rapport 2h
+	- Total: 68h
 	
 Lucas:
 	- Conception						10
