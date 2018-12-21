@@ -70,19 +70,24 @@ L’option `--ename` de recherche avec les méta-caractères shell a également 
 
 ## Clément
 
-| Conception           | 12h | 
-| Implémentation       | 41h | 
-| Tests                | 13h | 
-| Rédaction du rapport | 2h  | 
-| Total:               | 68h | 
+| Tâches               |  Temps (heures) |
+| :-------------       | :-------------: |
+| Implémentation       |              41 |
+| Tests                |              13 |
+| Rédaction du rapport |               2 |
+| Conception           |              12 |
+| Total:               |              68 |
 
 ## Lucas
 
-| Conception						        |  10 |
-| Implémentation				            |  40 |
-| Tests									    |   3 |
-| Rédaction du rapport	                    |   4 |
-| Total:                                    | 57h |
+| Tâches                                    |  Temps (heures) |
+| :-------------                            | :-------------: |
+| Conception						        |              10 |
+| Implémentation				            |              40 |
+| Tests									 |               3 |
+| Rédaction du rapport	                  |               4 |
+| Total:                                    |              57 |
+|                                           |                 |
 
 
 
